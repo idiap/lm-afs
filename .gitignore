@@ -1,0 +1,4 @@
+__pycache__/
+data-fineweb10B/
+results-fineweb10B/*.pt
+results-fineweb10B/*gelu-none*.*

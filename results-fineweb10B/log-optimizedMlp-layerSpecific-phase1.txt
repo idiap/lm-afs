@@ -1,0 +1,2826 @@
+Hyperparameters:
+  runName = "optimizedMlp-layerSpecific-phase1"
+  seed = 1234
+  plotMinAcc = 0.0
+  plotMaxAcc = 0.4
+  plotMinLoss = 3.0
+  plotMaxLoss = 15.0
+  shuffleTrData = 1
+  tokenDocSep = 50256
+  dtype = torch.float32
+  flexBlockSize = 32
+  nLayers = 4
+  nHeads = 4
+  dimEmb = 256
+  tieEmbeddings = True
+  afType = ['spline', 'linear']
+  afLayerSpecific = 1
+  afRange = 15
+  afNAnchors = 64
+  afLr = 0.1
+  afInit = 0.01
+  afFileToLoad = ""
+  dirResults = "./results-fineweb10B"
+  filesTokensTr = "./data-fineweb10B/fineweb_train_*.bin"
+  filesTokensVa = "./data-fineweb10B/fineweb_val_*.bin"
+  filesTokensTe = ""
+  lr = 0.0006
+  freezeEmbeddings = 0
+  batchSize = 1
+  seqLength = 4096
+  nSteps = 20000
+  nStepsWarmup = 2000
+  nStepsCooldown = 10000
+  wtDecay = 0.0
+  nModels = 20
+  staggeredStarts = 2
+  sameDataAcrossModels = False
+  sameInitAcrossModels = False
+  adamB1 = 0.8
+  adamB2 = 0.95
+  afAdamB1 = 0.99
+  afAdamB2 = 0.999
+  gradientClipping = 0
+  contextSize = 1024
+  lrSchedule = "trap"
+  nTokensVa = 10485760
+  valEvery = 500
+  saveModelEvery = -1
+  saveAfEvery = 0
+  plotEvery = 200
+  plottingLevel = 2
+====================================================================================================
+pytorch 2.10.0.dev20251001+cu126, CUDA 12.6
+Thu Feb 12 20:17:20 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 566.07                 Driver Version: 566.07         CUDA Version: 12.7     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                  Driver-Model | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 4090 ...  WDDM  |   00000000:01:00.0 Off |                  N/A |
+| N/A   61C    P3             27W /  105W |     236MiB /  16376MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A     18524      C   ...nvs\modded-nanogpt-py312\python.exe      N/A      |
++-----------------------------------------------------------------------------------------+
+
+Tr data: 800,000,000 tokens, 8 files (./data-fineweb10B/fineweb_train_*.bin)
+Va data: 100,000,000 tokens, 1 files (./data-fineweb10B/fineweb_val_*.bin)
+Number of validation batches: 2,560 (10,485,760 tokens, 4,096 tokens/sequence)
+====================================================================================================
+Projected number of training tokens:
+  20,000 steps * 1 batchSize * 4,096 seqLength
+  = 81,920,000 tokens
+  = 0.10 epochs
+Vocabulary size: 50,304
+====================================================================================================
+Number of model parameters (frozen): 0
+Number of model parameters (trainable): 16,026,390
+  _orig_mod.skipWeights                              2
+  _orig_mod.transformer.wte.weight                   12,877,824
+  _orig_mod.transformer.h.0.blockLambdas             2
+  _orig_mod.transformer.h.0.attn.lambdas             1
+  _orig_mod.transformer.h.0.attn.projAtt.weight      1
+  _orig_mod.transformer.h.0.attn.projAtt.bias        1
+  _orig_mod.transformer.h.0.attn.projQ.weight        65,536
+  _orig_mod.transformer.h.0.attn.projK.weight        65,536
+  _orig_mod.transformer.h.0.attn.projV.weight        65,536
+  _orig_mod.transformer.h.0.attn.projOut.weight      65,536
+  _orig_mod.transformer.h.0.mlp.fc.weight            262,144
+  _orig_mod.transformer.h.0.mlp.proj.weight          262,144
+  _orig_mod.transformer.h.0.mlp.af.afVals            64
+  _orig_mod.transformer.h.0.normAtt.weight           256
+  _orig_mod.transformer.h.0.normMlp.weight           256
+  _orig_mod.transformer.h.1.blockLambdas             2
+  _orig_mod.transformer.h.1.attn.lambdas             1
+  _orig_mod.transformer.h.1.attn.projAtt.weight      1
+  _orig_mod.transformer.h.1.attn.projAtt.bias        1
+  _orig_mod.transformer.h.1.attn.projQ.weight        65,536
+  _orig_mod.transformer.h.1.attn.projK.weight        65,536
+  _orig_mod.transformer.h.1.attn.projV.weight        65,536
+  _orig_mod.transformer.h.1.attn.projOut.weight      65,536
+  _orig_mod.transformer.h.1.mlp.fc.weight            262,144
+  _orig_mod.transformer.h.1.mlp.proj.weight          262,144
+  _orig_mod.transformer.h.1.mlp.af.afVals            64
+  _orig_mod.transformer.h.1.normAtt.weight           256
+  _orig_mod.transformer.h.1.normMlp.weight           256
+  _orig_mod.transformer.h.2.blockLambdas             2
+  _orig_mod.transformer.h.2.attn.lambdas             1
+  _orig_mod.transformer.h.2.attn.projAtt.weight      1
+  _orig_mod.transformer.h.2.attn.projAtt.bias        1
+  _orig_mod.transformer.h.2.attn.projQ.weight        65,536
+  _orig_mod.transformer.h.2.attn.projK.weight        65,536
+  _orig_mod.transformer.h.2.attn.projV.weight        65,536
+  _orig_mod.transformer.h.2.attn.projOut.weight      65,536
+  _orig_mod.transformer.h.2.mlp.fc.weight            262,144
+  _orig_mod.transformer.h.2.mlp.proj.weight          262,144
+  _orig_mod.transformer.h.2.mlp.af.afVals            64
+  _orig_mod.transformer.h.2.normAtt.weight           256
+  _orig_mod.transformer.h.2.normMlp.weight           256
+  _orig_mod.transformer.h.3.blockLambdas             2
+  _orig_mod.transformer.h.3.attn.lambdas             1
+  _orig_mod.transformer.h.3.attn.projAtt.weight      1
+  _orig_mod.transformer.h.3.attn.projAtt.bias        1
+  _orig_mod.transformer.h.3.attn.projQ.weight        65,536
+  _orig_mod.transformer.h.3.attn.projK.weight        65,536
+  _orig_mod.transformer.h.3.attn.projV.weight        65,536
+  _orig_mod.transformer.h.3.attn.projOut.weight      65,536
+  _orig_mod.transformer.h.3.mlp.fc.weight            262,144
+  _orig_mod.transformer.h.3.mlp.proj.weight          262,144
+  _orig_mod.transformer.h.3.mlp.af.afVals            64
+  _orig_mod.transformer.h.3.normAtt.weight           256
+  _orig_mod.transformer.h.3.normMlp.weight           256
+  _orig_mod.normWte.weight                           256
+  _orig_mod.normWte.bias                             256
+5.1 tokens/parameter
+====================================================================================================
+Optimizer #0/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.0._orig_mod.skipWeights
+  models.0._orig_mod.transformer.wte.weight
+  models.0._orig_mod.transformer.h.0.blockLambdas
+  models.0._orig_mod.transformer.h.0.attn.lambdas
+  models.0._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.0._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.0._orig_mod.transformer.h.0.attn.projQ.weight
+  models.0._orig_mod.transformer.h.0.attn.projK.weight
+  models.0._orig_mod.transformer.h.0.attn.projV.weight
+  models.0._orig_mod.transformer.h.0.attn.projOut.weight
+  models.0._orig_mod.transformer.h.0.mlp.fc.weight
+  models.0._orig_mod.transformer.h.0.mlp.proj.weight
+  models.0._orig_mod.transformer.h.0.normAtt.weight
+  models.0._orig_mod.transformer.h.0.normMlp.weight
+  models.0._orig_mod.transformer.h.1.blockLambdas
+  models.0._orig_mod.transformer.h.1.attn.lambdas
+  models.0._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.0._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.0._orig_mod.transformer.h.1.attn.projQ.weight
+  models.0._orig_mod.transformer.h.1.attn.projK.weight
+  models.0._orig_mod.transformer.h.1.attn.projV.weight
+  models.0._orig_mod.transformer.h.1.attn.projOut.weight
+  models.0._orig_mod.transformer.h.1.mlp.fc.weight
+  models.0._orig_mod.transformer.h.1.mlp.proj.weight
+  models.0._orig_mod.transformer.h.1.normAtt.weight
+  models.0._orig_mod.transformer.h.1.normMlp.weight
+  models.0._orig_mod.transformer.h.2.blockLambdas
+  models.0._orig_mod.transformer.h.2.attn.lambdas
+  models.0._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.0._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.0._orig_mod.transformer.h.2.attn.projQ.weight
+  models.0._orig_mod.transformer.h.2.attn.projK.weight
+  models.0._orig_mod.transformer.h.2.attn.projV.weight
+  models.0._orig_mod.transformer.h.2.attn.projOut.weight
+  models.0._orig_mod.transformer.h.2.mlp.fc.weight
+  models.0._orig_mod.transformer.h.2.mlp.proj.weight
+  models.0._orig_mod.transformer.h.2.normAtt.weight
+  models.0._orig_mod.transformer.h.2.normMlp.weight
+  models.0._orig_mod.transformer.h.3.blockLambdas
+  models.0._orig_mod.transformer.h.3.attn.lambdas
+  models.0._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.0._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.0._orig_mod.transformer.h.3.attn.projQ.weight
+  models.0._orig_mod.transformer.h.3.attn.projK.weight
+  models.0._orig_mod.transformer.h.3.attn.projV.weight
+  models.0._orig_mod.transformer.h.3.attn.projOut.weight
+  models.0._orig_mod.transformer.h.3.mlp.fc.weight
+  models.0._orig_mod.transformer.h.3.mlp.proj.weight
+  models.0._orig_mod.transformer.h.3.normAtt.weight
+  models.0._orig_mod.transformer.h.3.normMlp.weight
+  models.0._orig_mod.normWte.weight
+  models.0._orig_mod.normWte.bias
+Optimizer #1/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.1._orig_mod.skipWeights
+  models.1._orig_mod.transformer.wte.weight
+  models.1._orig_mod.transformer.h.0.blockLambdas
+  models.1._orig_mod.transformer.h.0.attn.lambdas
+  models.1._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.1._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.1._orig_mod.transformer.h.0.attn.projQ.weight
+  models.1._orig_mod.transformer.h.0.attn.projK.weight
+  models.1._orig_mod.transformer.h.0.attn.projV.weight
+  models.1._orig_mod.transformer.h.0.attn.projOut.weight
+  models.1._orig_mod.transformer.h.0.mlp.fc.weight
+  models.1._orig_mod.transformer.h.0.mlp.proj.weight
+  models.1._orig_mod.transformer.h.0.normAtt.weight
+  models.1._orig_mod.transformer.h.0.normMlp.weight
+  models.1._orig_mod.transformer.h.1.blockLambdas
+  models.1._orig_mod.transformer.h.1.attn.lambdas
+  models.1._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.1._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.1._orig_mod.transformer.h.1.attn.projQ.weight
+  models.1._orig_mod.transformer.h.1.attn.projK.weight
+  models.1._orig_mod.transformer.h.1.attn.projV.weight
+  models.1._orig_mod.transformer.h.1.attn.projOut.weight
+  models.1._orig_mod.transformer.h.1.mlp.fc.weight
+  models.1._orig_mod.transformer.h.1.mlp.proj.weight
+  models.1._orig_mod.transformer.h.1.normAtt.weight
+  models.1._orig_mod.transformer.h.1.normMlp.weight
+  models.1._orig_mod.transformer.h.2.blockLambdas
+  models.1._orig_mod.transformer.h.2.attn.lambdas
+  models.1._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.1._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.1._orig_mod.transformer.h.2.attn.projQ.weight
+  models.1._orig_mod.transformer.h.2.attn.projK.weight
+  models.1._orig_mod.transformer.h.2.attn.projV.weight
+  models.1._orig_mod.transformer.h.2.attn.projOut.weight
+  models.1._orig_mod.transformer.h.2.mlp.fc.weight
+  models.1._orig_mod.transformer.h.2.mlp.proj.weight
+  models.1._orig_mod.transformer.h.2.normAtt.weight
+  models.1._orig_mod.transformer.h.2.normMlp.weight
+  models.1._orig_mod.transformer.h.3.blockLambdas
+  models.1._orig_mod.transformer.h.3.attn.lambdas
+  models.1._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.1._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.1._orig_mod.transformer.h.3.attn.projQ.weight
+  models.1._orig_mod.transformer.h.3.attn.projK.weight
+  models.1._orig_mod.transformer.h.3.attn.projV.weight
+  models.1._orig_mod.transformer.h.3.attn.projOut.weight
+  models.1._orig_mod.transformer.h.3.mlp.fc.weight
+  models.1._orig_mod.transformer.h.3.mlp.proj.weight
+  models.1._orig_mod.transformer.h.3.normAtt.weight
+  models.1._orig_mod.transformer.h.3.normMlp.weight
+  models.1._orig_mod.normWte.weight
+  models.1._orig_mod.normWte.bias
+Optimizer #2/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.2._orig_mod.skipWeights
+  models.2._orig_mod.transformer.wte.weight
+  models.2._orig_mod.transformer.h.0.blockLambdas
+  models.2._orig_mod.transformer.h.0.attn.lambdas
+  models.2._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.2._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.2._orig_mod.transformer.h.0.attn.projQ.weight
+  models.2._orig_mod.transformer.h.0.attn.projK.weight
+  models.2._orig_mod.transformer.h.0.attn.projV.weight
+  models.2._orig_mod.transformer.h.0.attn.projOut.weight
+  models.2._orig_mod.transformer.h.0.mlp.fc.weight
+  models.2._orig_mod.transformer.h.0.mlp.proj.weight
+  models.2._orig_mod.transformer.h.0.normAtt.weight
+  models.2._orig_mod.transformer.h.0.normMlp.weight
+  models.2._orig_mod.transformer.h.1.blockLambdas
+  models.2._orig_mod.transformer.h.1.attn.lambdas
+  models.2._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.2._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.2._orig_mod.transformer.h.1.attn.projQ.weight
+  models.2._orig_mod.transformer.h.1.attn.projK.weight
+  models.2._orig_mod.transformer.h.1.attn.projV.weight
+  models.2._orig_mod.transformer.h.1.attn.projOut.weight
+  models.2._orig_mod.transformer.h.1.mlp.fc.weight
+  models.2._orig_mod.transformer.h.1.mlp.proj.weight
+  models.2._orig_mod.transformer.h.1.normAtt.weight
+  models.2._orig_mod.transformer.h.1.normMlp.weight
+  models.2._orig_mod.transformer.h.2.blockLambdas
+  models.2._orig_mod.transformer.h.2.attn.lambdas
+  models.2._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.2._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.2._orig_mod.transformer.h.2.attn.projQ.weight
+  models.2._orig_mod.transformer.h.2.attn.projK.weight
+  models.2._orig_mod.transformer.h.2.attn.projV.weight
+  models.2._orig_mod.transformer.h.2.attn.projOut.weight
+  models.2._orig_mod.transformer.h.2.mlp.fc.weight
+  models.2._orig_mod.transformer.h.2.mlp.proj.weight
+  models.2._orig_mod.transformer.h.2.normAtt.weight
+  models.2._orig_mod.transformer.h.2.normMlp.weight
+  models.2._orig_mod.transformer.h.3.blockLambdas
+  models.2._orig_mod.transformer.h.3.attn.lambdas
+  models.2._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.2._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.2._orig_mod.transformer.h.3.attn.projQ.weight
+  models.2._orig_mod.transformer.h.3.attn.projK.weight
+  models.2._orig_mod.transformer.h.3.attn.projV.weight
+  models.2._orig_mod.transformer.h.3.attn.projOut.weight
+  models.2._orig_mod.transformer.h.3.mlp.fc.weight
+  models.2._orig_mod.transformer.h.3.mlp.proj.weight
+  models.2._orig_mod.transformer.h.3.normAtt.weight
+  models.2._orig_mod.transformer.h.3.normMlp.weight
+  models.2._orig_mod.normWte.weight
+  models.2._orig_mod.normWte.bias
+Optimizer #3/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.3._orig_mod.skipWeights
+  models.3._orig_mod.transformer.wte.weight
+  models.3._orig_mod.transformer.h.0.blockLambdas
+  models.3._orig_mod.transformer.h.0.attn.lambdas
+  models.3._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.3._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.3._orig_mod.transformer.h.0.attn.projQ.weight
+  models.3._orig_mod.transformer.h.0.attn.projK.weight
+  models.3._orig_mod.transformer.h.0.attn.projV.weight
+  models.3._orig_mod.transformer.h.0.attn.projOut.weight
+  models.3._orig_mod.transformer.h.0.mlp.fc.weight
+  models.3._orig_mod.transformer.h.0.mlp.proj.weight
+  models.3._orig_mod.transformer.h.0.normAtt.weight
+  models.3._orig_mod.transformer.h.0.normMlp.weight
+  models.3._orig_mod.transformer.h.1.blockLambdas
+  models.3._orig_mod.transformer.h.1.attn.lambdas
+  models.3._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.3._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.3._orig_mod.transformer.h.1.attn.projQ.weight
+  models.3._orig_mod.transformer.h.1.attn.projK.weight
+  models.3._orig_mod.transformer.h.1.attn.projV.weight
+  models.3._orig_mod.transformer.h.1.attn.projOut.weight
+  models.3._orig_mod.transformer.h.1.mlp.fc.weight
+  models.3._orig_mod.transformer.h.1.mlp.proj.weight
+  models.3._orig_mod.transformer.h.1.normAtt.weight
+  models.3._orig_mod.transformer.h.1.normMlp.weight
+  models.3._orig_mod.transformer.h.2.blockLambdas
+  models.3._orig_mod.transformer.h.2.attn.lambdas
+  models.3._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.3._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.3._orig_mod.transformer.h.2.attn.projQ.weight
+  models.3._orig_mod.transformer.h.2.attn.projK.weight
+  models.3._orig_mod.transformer.h.2.attn.projV.weight
+  models.3._orig_mod.transformer.h.2.attn.projOut.weight
+  models.3._orig_mod.transformer.h.2.mlp.fc.weight
+  models.3._orig_mod.transformer.h.2.mlp.proj.weight
+  models.3._orig_mod.transformer.h.2.normAtt.weight
+  models.3._orig_mod.transformer.h.2.normMlp.weight
+  models.3._orig_mod.transformer.h.3.blockLambdas
+  models.3._orig_mod.transformer.h.3.attn.lambdas
+  models.3._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.3._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.3._orig_mod.transformer.h.3.attn.projQ.weight
+  models.3._orig_mod.transformer.h.3.attn.projK.weight
+  models.3._orig_mod.transformer.h.3.attn.projV.weight
+  models.3._orig_mod.transformer.h.3.attn.projOut.weight
+  models.3._orig_mod.transformer.h.3.mlp.fc.weight
+  models.3._orig_mod.transformer.h.3.mlp.proj.weight
+  models.3._orig_mod.transformer.h.3.normAtt.weight
+  models.3._orig_mod.transformer.h.3.normMlp.weight
+  models.3._orig_mod.normWte.weight
+  models.3._orig_mod.normWte.bias
+Optimizer #4/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.4._orig_mod.skipWeights
+  models.4._orig_mod.transformer.wte.weight
+  models.4._orig_mod.transformer.h.0.blockLambdas
+  models.4._orig_mod.transformer.h.0.attn.lambdas
+  models.4._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.4._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.4._orig_mod.transformer.h.0.attn.projQ.weight
+  models.4._orig_mod.transformer.h.0.attn.projK.weight
+  models.4._orig_mod.transformer.h.0.attn.projV.weight
+  models.4._orig_mod.transformer.h.0.attn.projOut.weight
+  models.4._orig_mod.transformer.h.0.mlp.fc.weight
+  models.4._orig_mod.transformer.h.0.mlp.proj.weight
+  models.4._orig_mod.transformer.h.0.normAtt.weight
+  models.4._orig_mod.transformer.h.0.normMlp.weight
+  models.4._orig_mod.transformer.h.1.blockLambdas
+  models.4._orig_mod.transformer.h.1.attn.lambdas
+  models.4._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.4._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.4._orig_mod.transformer.h.1.attn.projQ.weight
+  models.4._orig_mod.transformer.h.1.attn.projK.weight
+  models.4._orig_mod.transformer.h.1.attn.projV.weight
+  models.4._orig_mod.transformer.h.1.attn.projOut.weight
+  models.4._orig_mod.transformer.h.1.mlp.fc.weight
+  models.4._orig_mod.transformer.h.1.mlp.proj.weight
+  models.4._orig_mod.transformer.h.1.normAtt.weight
+  models.4._orig_mod.transformer.h.1.normMlp.weight
+  models.4._orig_mod.transformer.h.2.blockLambdas
+  models.4._orig_mod.transformer.h.2.attn.lambdas
+  models.4._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.4._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.4._orig_mod.transformer.h.2.attn.projQ.weight
+  models.4._orig_mod.transformer.h.2.attn.projK.weight
+  models.4._orig_mod.transformer.h.2.attn.projV.weight
+  models.4._orig_mod.transformer.h.2.attn.projOut.weight
+  models.4._orig_mod.transformer.h.2.mlp.fc.weight
+  models.4._orig_mod.transformer.h.2.mlp.proj.weight
+  models.4._orig_mod.transformer.h.2.normAtt.weight
+  models.4._orig_mod.transformer.h.2.normMlp.weight
+  models.4._orig_mod.transformer.h.3.blockLambdas
+  models.4._orig_mod.transformer.h.3.attn.lambdas
+  models.4._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.4._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.4._orig_mod.transformer.h.3.attn.projQ.weight
+  models.4._orig_mod.transformer.h.3.attn.projK.weight
+  models.4._orig_mod.transformer.h.3.attn.projV.weight
+  models.4._orig_mod.transformer.h.3.attn.projOut.weight
+  models.4._orig_mod.transformer.h.3.mlp.fc.weight
+  models.4._orig_mod.transformer.h.3.mlp.proj.weight
+  models.4._orig_mod.transformer.h.3.normAtt.weight
+  models.4._orig_mod.transformer.h.3.normMlp.weight
+  models.4._orig_mod.normWte.weight
+  models.4._orig_mod.normWte.bias
+Optimizer #5/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.5._orig_mod.skipWeights
+  models.5._orig_mod.transformer.wte.weight
+  models.5._orig_mod.transformer.h.0.blockLambdas
+  models.5._orig_mod.transformer.h.0.attn.lambdas
+  models.5._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.5._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.5._orig_mod.transformer.h.0.attn.projQ.weight
+  models.5._orig_mod.transformer.h.0.attn.projK.weight
+  models.5._orig_mod.transformer.h.0.attn.projV.weight
+  models.5._orig_mod.transformer.h.0.attn.projOut.weight
+  models.5._orig_mod.transformer.h.0.mlp.fc.weight
+  models.5._orig_mod.transformer.h.0.mlp.proj.weight
+  models.5._orig_mod.transformer.h.0.normAtt.weight
+  models.5._orig_mod.transformer.h.0.normMlp.weight
+  models.5._orig_mod.transformer.h.1.blockLambdas
+  models.5._orig_mod.transformer.h.1.attn.lambdas
+  models.5._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.5._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.5._orig_mod.transformer.h.1.attn.projQ.weight
+  models.5._orig_mod.transformer.h.1.attn.projK.weight
+  models.5._orig_mod.transformer.h.1.attn.projV.weight
+  models.5._orig_mod.transformer.h.1.attn.projOut.weight
+  models.5._orig_mod.transformer.h.1.mlp.fc.weight
+  models.5._orig_mod.transformer.h.1.mlp.proj.weight
+  models.5._orig_mod.transformer.h.1.normAtt.weight
+  models.5._orig_mod.transformer.h.1.normMlp.weight
+  models.5._orig_mod.transformer.h.2.blockLambdas
+  models.5._orig_mod.transformer.h.2.attn.lambdas
+  models.5._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.5._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.5._orig_mod.transformer.h.2.attn.projQ.weight
+  models.5._orig_mod.transformer.h.2.attn.projK.weight
+  models.5._orig_mod.transformer.h.2.attn.projV.weight
+  models.5._orig_mod.transformer.h.2.attn.projOut.weight
+  models.5._orig_mod.transformer.h.2.mlp.fc.weight
+  models.5._orig_mod.transformer.h.2.mlp.proj.weight
+  models.5._orig_mod.transformer.h.2.normAtt.weight
+  models.5._orig_mod.transformer.h.2.normMlp.weight
+  models.5._orig_mod.transformer.h.3.blockLambdas
+  models.5._orig_mod.transformer.h.3.attn.lambdas
+  models.5._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.5._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.5._orig_mod.transformer.h.3.attn.projQ.weight
+  models.5._orig_mod.transformer.h.3.attn.projK.weight
+  models.5._orig_mod.transformer.h.3.attn.projV.weight
+  models.5._orig_mod.transformer.h.3.attn.projOut.weight
+  models.5._orig_mod.transformer.h.3.mlp.fc.weight
+  models.5._orig_mod.transformer.h.3.mlp.proj.weight
+  models.5._orig_mod.transformer.h.3.normAtt.weight
+  models.5._orig_mod.transformer.h.3.normMlp.weight
+  models.5._orig_mod.normWte.weight
+  models.5._orig_mod.normWte.bias
+Optimizer #6/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.6._orig_mod.skipWeights
+  models.6._orig_mod.transformer.wte.weight
+  models.6._orig_mod.transformer.h.0.blockLambdas
+  models.6._orig_mod.transformer.h.0.attn.lambdas
+  models.6._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.6._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.6._orig_mod.transformer.h.0.attn.projQ.weight
+  models.6._orig_mod.transformer.h.0.attn.projK.weight
+  models.6._orig_mod.transformer.h.0.attn.projV.weight
+  models.6._orig_mod.transformer.h.0.attn.projOut.weight
+  models.6._orig_mod.transformer.h.0.mlp.fc.weight
+  models.6._orig_mod.transformer.h.0.mlp.proj.weight
+  models.6._orig_mod.transformer.h.0.normAtt.weight
+  models.6._orig_mod.transformer.h.0.normMlp.weight
+  models.6._orig_mod.transformer.h.1.blockLambdas
+  models.6._orig_mod.transformer.h.1.attn.lambdas
+  models.6._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.6._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.6._orig_mod.transformer.h.1.attn.projQ.weight
+  models.6._orig_mod.transformer.h.1.attn.projK.weight
+  models.6._orig_mod.transformer.h.1.attn.projV.weight
+  models.6._orig_mod.transformer.h.1.attn.projOut.weight
+  models.6._orig_mod.transformer.h.1.mlp.fc.weight
+  models.6._orig_mod.transformer.h.1.mlp.proj.weight
+  models.6._orig_mod.transformer.h.1.normAtt.weight
+  models.6._orig_mod.transformer.h.1.normMlp.weight
+  models.6._orig_mod.transformer.h.2.blockLambdas
+  models.6._orig_mod.transformer.h.2.attn.lambdas
+  models.6._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.6._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.6._orig_mod.transformer.h.2.attn.projQ.weight
+  models.6._orig_mod.transformer.h.2.attn.projK.weight
+  models.6._orig_mod.transformer.h.2.attn.projV.weight
+  models.6._orig_mod.transformer.h.2.attn.projOut.weight
+  models.6._orig_mod.transformer.h.2.mlp.fc.weight
+  models.6._orig_mod.transformer.h.2.mlp.proj.weight
+  models.6._orig_mod.transformer.h.2.normAtt.weight
+  models.6._orig_mod.transformer.h.2.normMlp.weight
+  models.6._orig_mod.transformer.h.3.blockLambdas
+  models.6._orig_mod.transformer.h.3.attn.lambdas
+  models.6._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.6._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.6._orig_mod.transformer.h.3.attn.projQ.weight
+  models.6._orig_mod.transformer.h.3.attn.projK.weight
+  models.6._orig_mod.transformer.h.3.attn.projV.weight
+  models.6._orig_mod.transformer.h.3.attn.projOut.weight
+  models.6._orig_mod.transformer.h.3.mlp.fc.weight
+  models.6._orig_mod.transformer.h.3.mlp.proj.weight
+  models.6._orig_mod.transformer.h.3.normAtt.weight
+  models.6._orig_mod.transformer.h.3.normMlp.weight
+  models.6._orig_mod.normWte.weight
+  models.6._orig_mod.normWte.bias
+Optimizer #7/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.7._orig_mod.skipWeights
+  models.7._orig_mod.transformer.wte.weight
+  models.7._orig_mod.transformer.h.0.blockLambdas
+  models.7._orig_mod.transformer.h.0.attn.lambdas
+  models.7._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.7._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.7._orig_mod.transformer.h.0.attn.projQ.weight
+  models.7._orig_mod.transformer.h.0.attn.projK.weight
+  models.7._orig_mod.transformer.h.0.attn.projV.weight
+  models.7._orig_mod.transformer.h.0.attn.projOut.weight
+  models.7._orig_mod.transformer.h.0.mlp.fc.weight
+  models.7._orig_mod.transformer.h.0.mlp.proj.weight
+  models.7._orig_mod.transformer.h.0.normAtt.weight
+  models.7._orig_mod.transformer.h.0.normMlp.weight
+  models.7._orig_mod.transformer.h.1.blockLambdas
+  models.7._orig_mod.transformer.h.1.attn.lambdas
+  models.7._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.7._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.7._orig_mod.transformer.h.1.attn.projQ.weight
+  models.7._orig_mod.transformer.h.1.attn.projK.weight
+  models.7._orig_mod.transformer.h.1.attn.projV.weight
+  models.7._orig_mod.transformer.h.1.attn.projOut.weight
+  models.7._orig_mod.transformer.h.1.mlp.fc.weight
+  models.7._orig_mod.transformer.h.1.mlp.proj.weight
+  models.7._orig_mod.transformer.h.1.normAtt.weight
+  models.7._orig_mod.transformer.h.1.normMlp.weight
+  models.7._orig_mod.transformer.h.2.blockLambdas
+  models.7._orig_mod.transformer.h.2.attn.lambdas
+  models.7._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.7._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.7._orig_mod.transformer.h.2.attn.projQ.weight
+  models.7._orig_mod.transformer.h.2.attn.projK.weight
+  models.7._orig_mod.transformer.h.2.attn.projV.weight
+  models.7._orig_mod.transformer.h.2.attn.projOut.weight
+  models.7._orig_mod.transformer.h.2.mlp.fc.weight
+  models.7._orig_mod.transformer.h.2.mlp.proj.weight
+  models.7._orig_mod.transformer.h.2.normAtt.weight
+  models.7._orig_mod.transformer.h.2.normMlp.weight
+  models.7._orig_mod.transformer.h.3.blockLambdas
+  models.7._orig_mod.transformer.h.3.attn.lambdas
+  models.7._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.7._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.7._orig_mod.transformer.h.3.attn.projQ.weight
+  models.7._orig_mod.transformer.h.3.attn.projK.weight
+  models.7._orig_mod.transformer.h.3.attn.projV.weight
+  models.7._orig_mod.transformer.h.3.attn.projOut.weight
+  models.7._orig_mod.transformer.h.3.mlp.fc.weight
+  models.7._orig_mod.transformer.h.3.mlp.proj.weight
+  models.7._orig_mod.transformer.h.3.normAtt.weight
+  models.7._orig_mod.transformer.h.3.normMlp.weight
+  models.7._orig_mod.normWte.weight
+  models.7._orig_mod.normWte.bias
+Optimizer #8/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.8._orig_mod.skipWeights
+  models.8._orig_mod.transformer.wte.weight
+  models.8._orig_mod.transformer.h.0.blockLambdas
+  models.8._orig_mod.transformer.h.0.attn.lambdas
+  models.8._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.8._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.8._orig_mod.transformer.h.0.attn.projQ.weight
+  models.8._orig_mod.transformer.h.0.attn.projK.weight
+  models.8._orig_mod.transformer.h.0.attn.projV.weight
+  models.8._orig_mod.transformer.h.0.attn.projOut.weight
+  models.8._orig_mod.transformer.h.0.mlp.fc.weight
+  models.8._orig_mod.transformer.h.0.mlp.proj.weight
+  models.8._orig_mod.transformer.h.0.normAtt.weight
+  models.8._orig_mod.transformer.h.0.normMlp.weight
+  models.8._orig_mod.transformer.h.1.blockLambdas
+  models.8._orig_mod.transformer.h.1.attn.lambdas
+  models.8._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.8._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.8._orig_mod.transformer.h.1.attn.projQ.weight
+  models.8._orig_mod.transformer.h.1.attn.projK.weight
+  models.8._orig_mod.transformer.h.1.attn.projV.weight
+  models.8._orig_mod.transformer.h.1.attn.projOut.weight
+  models.8._orig_mod.transformer.h.1.mlp.fc.weight
+  models.8._orig_mod.transformer.h.1.mlp.proj.weight
+  models.8._orig_mod.transformer.h.1.normAtt.weight
+  models.8._orig_mod.transformer.h.1.normMlp.weight
+  models.8._orig_mod.transformer.h.2.blockLambdas
+  models.8._orig_mod.transformer.h.2.attn.lambdas
+  models.8._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.8._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.8._orig_mod.transformer.h.2.attn.projQ.weight
+  models.8._orig_mod.transformer.h.2.attn.projK.weight
+  models.8._orig_mod.transformer.h.2.attn.projV.weight
+  models.8._orig_mod.transformer.h.2.attn.projOut.weight
+  models.8._orig_mod.transformer.h.2.mlp.fc.weight
+  models.8._orig_mod.transformer.h.2.mlp.proj.weight
+  models.8._orig_mod.transformer.h.2.normAtt.weight
+  models.8._orig_mod.transformer.h.2.normMlp.weight
+  models.8._orig_mod.transformer.h.3.blockLambdas
+  models.8._orig_mod.transformer.h.3.attn.lambdas
+  models.8._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.8._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.8._orig_mod.transformer.h.3.attn.projQ.weight
+  models.8._orig_mod.transformer.h.3.attn.projK.weight
+  models.8._orig_mod.transformer.h.3.attn.projV.weight
+  models.8._orig_mod.transformer.h.3.attn.projOut.weight
+  models.8._orig_mod.transformer.h.3.mlp.fc.weight
+  models.8._orig_mod.transformer.h.3.mlp.proj.weight
+  models.8._orig_mod.transformer.h.3.normAtt.weight
+  models.8._orig_mod.transformer.h.3.normMlp.weight
+  models.8._orig_mod.normWte.weight
+  models.8._orig_mod.normWte.bias
+Optimizer #9/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.9._orig_mod.skipWeights
+  models.9._orig_mod.transformer.wte.weight
+  models.9._orig_mod.transformer.h.0.blockLambdas
+  models.9._orig_mod.transformer.h.0.attn.lambdas
+  models.9._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.9._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.9._orig_mod.transformer.h.0.attn.projQ.weight
+  models.9._orig_mod.transformer.h.0.attn.projK.weight
+  models.9._orig_mod.transformer.h.0.attn.projV.weight
+  models.9._orig_mod.transformer.h.0.attn.projOut.weight
+  models.9._orig_mod.transformer.h.0.mlp.fc.weight
+  models.9._orig_mod.transformer.h.0.mlp.proj.weight
+  models.9._orig_mod.transformer.h.0.normAtt.weight
+  models.9._orig_mod.transformer.h.0.normMlp.weight
+  models.9._orig_mod.transformer.h.1.blockLambdas
+  models.9._orig_mod.transformer.h.1.attn.lambdas
+  models.9._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.9._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.9._orig_mod.transformer.h.1.attn.projQ.weight
+  models.9._orig_mod.transformer.h.1.attn.projK.weight
+  models.9._orig_mod.transformer.h.1.attn.projV.weight
+  models.9._orig_mod.transformer.h.1.attn.projOut.weight
+  models.9._orig_mod.transformer.h.1.mlp.fc.weight
+  models.9._orig_mod.transformer.h.1.mlp.proj.weight
+  models.9._orig_mod.transformer.h.1.normAtt.weight
+  models.9._orig_mod.transformer.h.1.normMlp.weight
+  models.9._orig_mod.transformer.h.2.blockLambdas
+  models.9._orig_mod.transformer.h.2.attn.lambdas
+  models.9._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.9._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.9._orig_mod.transformer.h.2.attn.projQ.weight
+  models.9._orig_mod.transformer.h.2.attn.projK.weight
+  models.9._orig_mod.transformer.h.2.attn.projV.weight
+  models.9._orig_mod.transformer.h.2.attn.projOut.weight
+  models.9._orig_mod.transformer.h.2.mlp.fc.weight
+  models.9._orig_mod.transformer.h.2.mlp.proj.weight
+  models.9._orig_mod.transformer.h.2.normAtt.weight
+  models.9._orig_mod.transformer.h.2.normMlp.weight
+  models.9._orig_mod.transformer.h.3.blockLambdas
+  models.9._orig_mod.transformer.h.3.attn.lambdas
+  models.9._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.9._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.9._orig_mod.transformer.h.3.attn.projQ.weight
+  models.9._orig_mod.transformer.h.3.attn.projK.weight
+  models.9._orig_mod.transformer.h.3.attn.projV.weight
+  models.9._orig_mod.transformer.h.3.attn.projOut.weight
+  models.9._orig_mod.transformer.h.3.mlp.fc.weight
+  models.9._orig_mod.transformer.h.3.mlp.proj.weight
+  models.9._orig_mod.transformer.h.3.normAtt.weight
+  models.9._orig_mod.transformer.h.3.normMlp.weight
+  models.9._orig_mod.normWte.weight
+  models.9._orig_mod.normWte.bias
+Optimizer #10/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.10._orig_mod.skipWeights
+  models.10._orig_mod.transformer.wte.weight
+  models.10._orig_mod.transformer.h.0.blockLambdas
+  models.10._orig_mod.transformer.h.0.attn.lambdas
+  models.10._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.10._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.10._orig_mod.transformer.h.0.attn.projQ.weight
+  models.10._orig_mod.transformer.h.0.attn.projK.weight
+  models.10._orig_mod.transformer.h.0.attn.projV.weight
+  models.10._orig_mod.transformer.h.0.attn.projOut.weight
+  models.10._orig_mod.transformer.h.0.mlp.fc.weight
+  models.10._orig_mod.transformer.h.0.mlp.proj.weight
+  models.10._orig_mod.transformer.h.0.normAtt.weight
+  models.10._orig_mod.transformer.h.0.normMlp.weight
+  models.10._orig_mod.transformer.h.1.blockLambdas
+  models.10._orig_mod.transformer.h.1.attn.lambdas
+  models.10._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.10._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.10._orig_mod.transformer.h.1.attn.projQ.weight
+  models.10._orig_mod.transformer.h.1.attn.projK.weight
+  models.10._orig_mod.transformer.h.1.attn.projV.weight
+  models.10._orig_mod.transformer.h.1.attn.projOut.weight
+  models.10._orig_mod.transformer.h.1.mlp.fc.weight
+  models.10._orig_mod.transformer.h.1.mlp.proj.weight
+  models.10._orig_mod.transformer.h.1.normAtt.weight
+  models.10._orig_mod.transformer.h.1.normMlp.weight
+  models.10._orig_mod.transformer.h.2.blockLambdas
+  models.10._orig_mod.transformer.h.2.attn.lambdas
+  models.10._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.10._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.10._orig_mod.transformer.h.2.attn.projQ.weight
+  models.10._orig_mod.transformer.h.2.attn.projK.weight
+  models.10._orig_mod.transformer.h.2.attn.projV.weight
+  models.10._orig_mod.transformer.h.2.attn.projOut.weight
+  models.10._orig_mod.transformer.h.2.mlp.fc.weight
+  models.10._orig_mod.transformer.h.2.mlp.proj.weight
+  models.10._orig_mod.transformer.h.2.normAtt.weight
+  models.10._orig_mod.transformer.h.2.normMlp.weight
+  models.10._orig_mod.transformer.h.3.blockLambdas
+  models.10._orig_mod.transformer.h.3.attn.lambdas
+  models.10._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.10._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.10._orig_mod.transformer.h.3.attn.projQ.weight
+  models.10._orig_mod.transformer.h.3.attn.projK.weight
+  models.10._orig_mod.transformer.h.3.attn.projV.weight
+  models.10._orig_mod.transformer.h.3.attn.projOut.weight
+  models.10._orig_mod.transformer.h.3.mlp.fc.weight
+  models.10._orig_mod.transformer.h.3.mlp.proj.weight
+  models.10._orig_mod.transformer.h.3.normAtt.weight
+  models.10._orig_mod.transformer.h.3.normMlp.weight
+  models.10._orig_mod.normWte.weight
+  models.10._orig_mod.normWte.bias
+Optimizer #11/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.11._orig_mod.skipWeights
+  models.11._orig_mod.transformer.wte.weight
+  models.11._orig_mod.transformer.h.0.blockLambdas
+  models.11._orig_mod.transformer.h.0.attn.lambdas
+  models.11._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.11._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.11._orig_mod.transformer.h.0.attn.projQ.weight
+  models.11._orig_mod.transformer.h.0.attn.projK.weight
+  models.11._orig_mod.transformer.h.0.attn.projV.weight
+  models.11._orig_mod.transformer.h.0.attn.projOut.weight
+  models.11._orig_mod.transformer.h.0.mlp.fc.weight
+  models.11._orig_mod.transformer.h.0.mlp.proj.weight
+  models.11._orig_mod.transformer.h.0.normAtt.weight
+  models.11._orig_mod.transformer.h.0.normMlp.weight
+  models.11._orig_mod.transformer.h.1.blockLambdas
+  models.11._orig_mod.transformer.h.1.attn.lambdas
+  models.11._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.11._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.11._orig_mod.transformer.h.1.attn.projQ.weight
+  models.11._orig_mod.transformer.h.1.attn.projK.weight
+  models.11._orig_mod.transformer.h.1.attn.projV.weight
+  models.11._orig_mod.transformer.h.1.attn.projOut.weight
+  models.11._orig_mod.transformer.h.1.mlp.fc.weight
+  models.11._orig_mod.transformer.h.1.mlp.proj.weight
+  models.11._orig_mod.transformer.h.1.normAtt.weight
+  models.11._orig_mod.transformer.h.1.normMlp.weight
+  models.11._orig_mod.transformer.h.2.blockLambdas
+  models.11._orig_mod.transformer.h.2.attn.lambdas
+  models.11._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.11._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.11._orig_mod.transformer.h.2.attn.projQ.weight
+  models.11._orig_mod.transformer.h.2.attn.projK.weight
+  models.11._orig_mod.transformer.h.2.attn.projV.weight
+  models.11._orig_mod.transformer.h.2.attn.projOut.weight
+  models.11._orig_mod.transformer.h.2.mlp.fc.weight
+  models.11._orig_mod.transformer.h.2.mlp.proj.weight
+  models.11._orig_mod.transformer.h.2.normAtt.weight
+  models.11._orig_mod.transformer.h.2.normMlp.weight
+  models.11._orig_mod.transformer.h.3.blockLambdas
+  models.11._orig_mod.transformer.h.3.attn.lambdas
+  models.11._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.11._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.11._orig_mod.transformer.h.3.attn.projQ.weight
+  models.11._orig_mod.transformer.h.3.attn.projK.weight
+  models.11._orig_mod.transformer.h.3.attn.projV.weight
+  models.11._orig_mod.transformer.h.3.attn.projOut.weight
+  models.11._orig_mod.transformer.h.3.mlp.fc.weight
+  models.11._orig_mod.transformer.h.3.mlp.proj.weight
+  models.11._orig_mod.transformer.h.3.normAtt.weight
+  models.11._orig_mod.transformer.h.3.normMlp.weight
+  models.11._orig_mod.normWte.weight
+  models.11._orig_mod.normWte.bias
+Optimizer #12/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.12._orig_mod.skipWeights
+  models.12._orig_mod.transformer.wte.weight
+  models.12._orig_mod.transformer.h.0.blockLambdas
+  models.12._orig_mod.transformer.h.0.attn.lambdas
+  models.12._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.12._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.12._orig_mod.transformer.h.0.attn.projQ.weight
+  models.12._orig_mod.transformer.h.0.attn.projK.weight
+  models.12._orig_mod.transformer.h.0.attn.projV.weight
+  models.12._orig_mod.transformer.h.0.attn.projOut.weight
+  models.12._orig_mod.transformer.h.0.mlp.fc.weight
+  models.12._orig_mod.transformer.h.0.mlp.proj.weight
+  models.12._orig_mod.transformer.h.0.normAtt.weight
+  models.12._orig_mod.transformer.h.0.normMlp.weight
+  models.12._orig_mod.transformer.h.1.blockLambdas
+  models.12._orig_mod.transformer.h.1.attn.lambdas
+  models.12._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.12._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.12._orig_mod.transformer.h.1.attn.projQ.weight
+  models.12._orig_mod.transformer.h.1.attn.projK.weight
+  models.12._orig_mod.transformer.h.1.attn.projV.weight
+  models.12._orig_mod.transformer.h.1.attn.projOut.weight
+  models.12._orig_mod.transformer.h.1.mlp.fc.weight
+  models.12._orig_mod.transformer.h.1.mlp.proj.weight
+  models.12._orig_mod.transformer.h.1.normAtt.weight
+  models.12._orig_mod.transformer.h.1.normMlp.weight
+  models.12._orig_mod.transformer.h.2.blockLambdas
+  models.12._orig_mod.transformer.h.2.attn.lambdas
+  models.12._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.12._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.12._orig_mod.transformer.h.2.attn.projQ.weight
+  models.12._orig_mod.transformer.h.2.attn.projK.weight
+  models.12._orig_mod.transformer.h.2.attn.projV.weight
+  models.12._orig_mod.transformer.h.2.attn.projOut.weight
+  models.12._orig_mod.transformer.h.2.mlp.fc.weight
+  models.12._orig_mod.transformer.h.2.mlp.proj.weight
+  models.12._orig_mod.transformer.h.2.normAtt.weight
+  models.12._orig_mod.transformer.h.2.normMlp.weight
+  models.12._orig_mod.transformer.h.3.blockLambdas
+  models.12._orig_mod.transformer.h.3.attn.lambdas
+  models.12._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.12._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.12._orig_mod.transformer.h.3.attn.projQ.weight
+  models.12._orig_mod.transformer.h.3.attn.projK.weight
+  models.12._orig_mod.transformer.h.3.attn.projV.weight
+  models.12._orig_mod.transformer.h.3.attn.projOut.weight
+  models.12._orig_mod.transformer.h.3.mlp.fc.weight
+  models.12._orig_mod.transformer.h.3.mlp.proj.weight
+  models.12._orig_mod.transformer.h.3.normAtt.weight
+  models.12._orig_mod.transformer.h.3.normMlp.weight
+  models.12._orig_mod.normWte.weight
+  models.12._orig_mod.normWte.bias
+Optimizer #13/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.13._orig_mod.skipWeights
+  models.13._orig_mod.transformer.wte.weight
+  models.13._orig_mod.transformer.h.0.blockLambdas
+  models.13._orig_mod.transformer.h.0.attn.lambdas
+  models.13._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.13._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.13._orig_mod.transformer.h.0.attn.projQ.weight
+  models.13._orig_mod.transformer.h.0.attn.projK.weight
+  models.13._orig_mod.transformer.h.0.attn.projV.weight
+  models.13._orig_mod.transformer.h.0.attn.projOut.weight
+  models.13._orig_mod.transformer.h.0.mlp.fc.weight
+  models.13._orig_mod.transformer.h.0.mlp.proj.weight
+  models.13._orig_mod.transformer.h.0.normAtt.weight
+  models.13._orig_mod.transformer.h.0.normMlp.weight
+  models.13._orig_mod.transformer.h.1.blockLambdas
+  models.13._orig_mod.transformer.h.1.attn.lambdas
+  models.13._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.13._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.13._orig_mod.transformer.h.1.attn.projQ.weight
+  models.13._orig_mod.transformer.h.1.attn.projK.weight
+  models.13._orig_mod.transformer.h.1.attn.projV.weight
+  models.13._orig_mod.transformer.h.1.attn.projOut.weight
+  models.13._orig_mod.transformer.h.1.mlp.fc.weight
+  models.13._orig_mod.transformer.h.1.mlp.proj.weight
+  models.13._orig_mod.transformer.h.1.normAtt.weight
+  models.13._orig_mod.transformer.h.1.normMlp.weight
+  models.13._orig_mod.transformer.h.2.blockLambdas
+  models.13._orig_mod.transformer.h.2.attn.lambdas
+  models.13._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.13._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.13._orig_mod.transformer.h.2.attn.projQ.weight
+  models.13._orig_mod.transformer.h.2.attn.projK.weight
+  models.13._orig_mod.transformer.h.2.attn.projV.weight
+  models.13._orig_mod.transformer.h.2.attn.projOut.weight
+  models.13._orig_mod.transformer.h.2.mlp.fc.weight
+  models.13._orig_mod.transformer.h.2.mlp.proj.weight
+  models.13._orig_mod.transformer.h.2.normAtt.weight
+  models.13._orig_mod.transformer.h.2.normMlp.weight
+  models.13._orig_mod.transformer.h.3.blockLambdas
+  models.13._orig_mod.transformer.h.3.attn.lambdas
+  models.13._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.13._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.13._orig_mod.transformer.h.3.attn.projQ.weight
+  models.13._orig_mod.transformer.h.3.attn.projK.weight
+  models.13._orig_mod.transformer.h.3.attn.projV.weight
+  models.13._orig_mod.transformer.h.3.attn.projOut.weight
+  models.13._orig_mod.transformer.h.3.mlp.fc.weight
+  models.13._orig_mod.transformer.h.3.mlp.proj.weight
+  models.13._orig_mod.transformer.h.3.normAtt.weight
+  models.13._orig_mod.transformer.h.3.normMlp.weight
+  models.13._orig_mod.normWte.weight
+  models.13._orig_mod.normWte.bias
+Optimizer #14/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.14._orig_mod.skipWeights
+  models.14._orig_mod.transformer.wte.weight
+  models.14._orig_mod.transformer.h.0.blockLambdas
+  models.14._orig_mod.transformer.h.0.attn.lambdas
+  models.14._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.14._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.14._orig_mod.transformer.h.0.attn.projQ.weight
+  models.14._orig_mod.transformer.h.0.attn.projK.weight
+  models.14._orig_mod.transformer.h.0.attn.projV.weight
+  models.14._orig_mod.transformer.h.0.attn.projOut.weight
+  models.14._orig_mod.transformer.h.0.mlp.fc.weight
+  models.14._orig_mod.transformer.h.0.mlp.proj.weight
+  models.14._orig_mod.transformer.h.0.normAtt.weight
+  models.14._orig_mod.transformer.h.0.normMlp.weight
+  models.14._orig_mod.transformer.h.1.blockLambdas
+  models.14._orig_mod.transformer.h.1.attn.lambdas
+  models.14._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.14._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.14._orig_mod.transformer.h.1.attn.projQ.weight
+  models.14._orig_mod.transformer.h.1.attn.projK.weight
+  models.14._orig_mod.transformer.h.1.attn.projV.weight
+  models.14._orig_mod.transformer.h.1.attn.projOut.weight
+  models.14._orig_mod.transformer.h.1.mlp.fc.weight
+  models.14._orig_mod.transformer.h.1.mlp.proj.weight
+  models.14._orig_mod.transformer.h.1.normAtt.weight
+  models.14._orig_mod.transformer.h.1.normMlp.weight
+  models.14._orig_mod.transformer.h.2.blockLambdas
+  models.14._orig_mod.transformer.h.2.attn.lambdas
+  models.14._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.14._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.14._orig_mod.transformer.h.2.attn.projQ.weight
+  models.14._orig_mod.transformer.h.2.attn.projK.weight
+  models.14._orig_mod.transformer.h.2.attn.projV.weight
+  models.14._orig_mod.transformer.h.2.attn.projOut.weight
+  models.14._orig_mod.transformer.h.2.mlp.fc.weight
+  models.14._orig_mod.transformer.h.2.mlp.proj.weight
+  models.14._orig_mod.transformer.h.2.normAtt.weight
+  models.14._orig_mod.transformer.h.2.normMlp.weight
+  models.14._orig_mod.transformer.h.3.blockLambdas
+  models.14._orig_mod.transformer.h.3.attn.lambdas
+  models.14._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.14._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.14._orig_mod.transformer.h.3.attn.projQ.weight
+  models.14._orig_mod.transformer.h.3.attn.projK.weight
+  models.14._orig_mod.transformer.h.3.attn.projV.weight
+  models.14._orig_mod.transformer.h.3.attn.projOut.weight
+  models.14._orig_mod.transformer.h.3.mlp.fc.weight
+  models.14._orig_mod.transformer.h.3.mlp.proj.weight
+  models.14._orig_mod.transformer.h.3.normAtt.weight
+  models.14._orig_mod.transformer.h.3.normMlp.weight
+  models.14._orig_mod.normWte.weight
+  models.14._orig_mod.normWte.bias
+Optimizer #15/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.15._orig_mod.skipWeights
+  models.15._orig_mod.transformer.wte.weight
+  models.15._orig_mod.transformer.h.0.blockLambdas
+  models.15._orig_mod.transformer.h.0.attn.lambdas
+  models.15._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.15._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.15._orig_mod.transformer.h.0.attn.projQ.weight
+  models.15._orig_mod.transformer.h.0.attn.projK.weight
+  models.15._orig_mod.transformer.h.0.attn.projV.weight
+  models.15._orig_mod.transformer.h.0.attn.projOut.weight
+  models.15._orig_mod.transformer.h.0.mlp.fc.weight
+  models.15._orig_mod.transformer.h.0.mlp.proj.weight
+  models.15._orig_mod.transformer.h.0.normAtt.weight
+  models.15._orig_mod.transformer.h.0.normMlp.weight
+  models.15._orig_mod.transformer.h.1.blockLambdas
+  models.15._orig_mod.transformer.h.1.attn.lambdas
+  models.15._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.15._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.15._orig_mod.transformer.h.1.attn.projQ.weight
+  models.15._orig_mod.transformer.h.1.attn.projK.weight
+  models.15._orig_mod.transformer.h.1.attn.projV.weight
+  models.15._orig_mod.transformer.h.1.attn.projOut.weight
+  models.15._orig_mod.transformer.h.1.mlp.fc.weight
+  models.15._orig_mod.transformer.h.1.mlp.proj.weight
+  models.15._orig_mod.transformer.h.1.normAtt.weight
+  models.15._orig_mod.transformer.h.1.normMlp.weight
+  models.15._orig_mod.transformer.h.2.blockLambdas
+  models.15._orig_mod.transformer.h.2.attn.lambdas
+  models.15._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.15._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.15._orig_mod.transformer.h.2.attn.projQ.weight
+  models.15._orig_mod.transformer.h.2.attn.projK.weight
+  models.15._orig_mod.transformer.h.2.attn.projV.weight
+  models.15._orig_mod.transformer.h.2.attn.projOut.weight
+  models.15._orig_mod.transformer.h.2.mlp.fc.weight
+  models.15._orig_mod.transformer.h.2.mlp.proj.weight
+  models.15._orig_mod.transformer.h.2.normAtt.weight
+  models.15._orig_mod.transformer.h.2.normMlp.weight
+  models.15._orig_mod.transformer.h.3.blockLambdas
+  models.15._orig_mod.transformer.h.3.attn.lambdas
+  models.15._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.15._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.15._orig_mod.transformer.h.3.attn.projQ.weight
+  models.15._orig_mod.transformer.h.3.attn.projK.weight
+  models.15._orig_mod.transformer.h.3.attn.projV.weight
+  models.15._orig_mod.transformer.h.3.attn.projOut.weight
+  models.15._orig_mod.transformer.h.3.mlp.fc.weight
+  models.15._orig_mod.transformer.h.3.mlp.proj.weight
+  models.15._orig_mod.transformer.h.3.normAtt.weight
+  models.15._orig_mod.transformer.h.3.normMlp.weight
+  models.15._orig_mod.normWte.weight
+  models.15._orig_mod.normWte.bias
+Optimizer #16/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.16._orig_mod.skipWeights
+  models.16._orig_mod.transformer.wte.weight
+  models.16._orig_mod.transformer.h.0.blockLambdas
+  models.16._orig_mod.transformer.h.0.attn.lambdas
+  models.16._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.16._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.16._orig_mod.transformer.h.0.attn.projQ.weight
+  models.16._orig_mod.transformer.h.0.attn.projK.weight
+  models.16._orig_mod.transformer.h.0.attn.projV.weight
+  models.16._orig_mod.transformer.h.0.attn.projOut.weight
+  models.16._orig_mod.transformer.h.0.mlp.fc.weight
+  models.16._orig_mod.transformer.h.0.mlp.proj.weight
+  models.16._orig_mod.transformer.h.0.normAtt.weight
+  models.16._orig_mod.transformer.h.0.normMlp.weight
+  models.16._orig_mod.transformer.h.1.blockLambdas
+  models.16._orig_mod.transformer.h.1.attn.lambdas
+  models.16._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.16._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.16._orig_mod.transformer.h.1.attn.projQ.weight
+  models.16._orig_mod.transformer.h.1.attn.projK.weight
+  models.16._orig_mod.transformer.h.1.attn.projV.weight
+  models.16._orig_mod.transformer.h.1.attn.projOut.weight
+  models.16._orig_mod.transformer.h.1.mlp.fc.weight
+  models.16._orig_mod.transformer.h.1.mlp.proj.weight
+  models.16._orig_mod.transformer.h.1.normAtt.weight
+  models.16._orig_mod.transformer.h.1.normMlp.weight
+  models.16._orig_mod.transformer.h.2.blockLambdas
+  models.16._orig_mod.transformer.h.2.attn.lambdas
+  models.16._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.16._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.16._orig_mod.transformer.h.2.attn.projQ.weight
+  models.16._orig_mod.transformer.h.2.attn.projK.weight
+  models.16._orig_mod.transformer.h.2.attn.projV.weight
+  models.16._orig_mod.transformer.h.2.attn.projOut.weight
+  models.16._orig_mod.transformer.h.2.mlp.fc.weight
+  models.16._orig_mod.transformer.h.2.mlp.proj.weight
+  models.16._orig_mod.transformer.h.2.normAtt.weight
+  models.16._orig_mod.transformer.h.2.normMlp.weight
+  models.16._orig_mod.transformer.h.3.blockLambdas
+  models.16._orig_mod.transformer.h.3.attn.lambdas
+  models.16._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.16._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.16._orig_mod.transformer.h.3.attn.projQ.weight
+  models.16._orig_mod.transformer.h.3.attn.projK.weight
+  models.16._orig_mod.transformer.h.3.attn.projV.weight
+  models.16._orig_mod.transformer.h.3.attn.projOut.weight
+  models.16._orig_mod.transformer.h.3.mlp.fc.weight
+  models.16._orig_mod.transformer.h.3.mlp.proj.weight
+  models.16._orig_mod.transformer.h.3.normAtt.weight
+  models.16._orig_mod.transformer.h.3.normMlp.weight
+  models.16._orig_mod.normWte.weight
+  models.16._orig_mod.normWte.bias
+Optimizer #17/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.17._orig_mod.skipWeights
+  models.17._orig_mod.transformer.wte.weight
+  models.17._orig_mod.transformer.h.0.blockLambdas
+  models.17._orig_mod.transformer.h.0.attn.lambdas
+  models.17._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.17._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.17._orig_mod.transformer.h.0.attn.projQ.weight
+  models.17._orig_mod.transformer.h.0.attn.projK.weight
+  models.17._orig_mod.transformer.h.0.attn.projV.weight
+  models.17._orig_mod.transformer.h.0.attn.projOut.weight
+  models.17._orig_mod.transformer.h.0.mlp.fc.weight
+  models.17._orig_mod.transformer.h.0.mlp.proj.weight
+  models.17._orig_mod.transformer.h.0.normAtt.weight
+  models.17._orig_mod.transformer.h.0.normMlp.weight
+  models.17._orig_mod.transformer.h.1.blockLambdas
+  models.17._orig_mod.transformer.h.1.attn.lambdas
+  models.17._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.17._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.17._orig_mod.transformer.h.1.attn.projQ.weight
+  models.17._orig_mod.transformer.h.1.attn.projK.weight
+  models.17._orig_mod.transformer.h.1.attn.projV.weight
+  models.17._orig_mod.transformer.h.1.attn.projOut.weight
+  models.17._orig_mod.transformer.h.1.mlp.fc.weight
+  models.17._orig_mod.transformer.h.1.mlp.proj.weight
+  models.17._orig_mod.transformer.h.1.normAtt.weight
+  models.17._orig_mod.transformer.h.1.normMlp.weight
+  models.17._orig_mod.transformer.h.2.blockLambdas
+  models.17._orig_mod.transformer.h.2.attn.lambdas
+  models.17._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.17._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.17._orig_mod.transformer.h.2.attn.projQ.weight
+  models.17._orig_mod.transformer.h.2.attn.projK.weight
+  models.17._orig_mod.transformer.h.2.attn.projV.weight
+  models.17._orig_mod.transformer.h.2.attn.projOut.weight
+  models.17._orig_mod.transformer.h.2.mlp.fc.weight
+  models.17._orig_mod.transformer.h.2.mlp.proj.weight
+  models.17._orig_mod.transformer.h.2.normAtt.weight
+  models.17._orig_mod.transformer.h.2.normMlp.weight
+  models.17._orig_mod.transformer.h.3.blockLambdas
+  models.17._orig_mod.transformer.h.3.attn.lambdas
+  models.17._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.17._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.17._orig_mod.transformer.h.3.attn.projQ.weight
+  models.17._orig_mod.transformer.h.3.attn.projK.weight
+  models.17._orig_mod.transformer.h.3.attn.projV.weight
+  models.17._orig_mod.transformer.h.3.attn.projOut.weight
+  models.17._orig_mod.transformer.h.3.mlp.fc.weight
+  models.17._orig_mod.transformer.h.3.mlp.proj.weight
+  models.17._orig_mod.transformer.h.3.normAtt.weight
+  models.17._orig_mod.transformer.h.3.normMlp.weight
+  models.17._orig_mod.normWte.weight
+  models.17._orig_mod.normWte.bias
+Optimizer #18/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.18._orig_mod.skipWeights
+  models.18._orig_mod.transformer.wte.weight
+  models.18._orig_mod.transformer.h.0.blockLambdas
+  models.18._orig_mod.transformer.h.0.attn.lambdas
+  models.18._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.18._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.18._orig_mod.transformer.h.0.attn.projQ.weight
+  models.18._orig_mod.transformer.h.0.attn.projK.weight
+  models.18._orig_mod.transformer.h.0.attn.projV.weight
+  models.18._orig_mod.transformer.h.0.attn.projOut.weight
+  models.18._orig_mod.transformer.h.0.mlp.fc.weight
+  models.18._orig_mod.transformer.h.0.mlp.proj.weight
+  models.18._orig_mod.transformer.h.0.normAtt.weight
+  models.18._orig_mod.transformer.h.0.normMlp.weight
+  models.18._orig_mod.transformer.h.1.blockLambdas
+  models.18._orig_mod.transformer.h.1.attn.lambdas
+  models.18._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.18._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.18._orig_mod.transformer.h.1.attn.projQ.weight
+  models.18._orig_mod.transformer.h.1.attn.projK.weight
+  models.18._orig_mod.transformer.h.1.attn.projV.weight
+  models.18._orig_mod.transformer.h.1.attn.projOut.weight
+  models.18._orig_mod.transformer.h.1.mlp.fc.weight
+  models.18._orig_mod.transformer.h.1.mlp.proj.weight
+  models.18._orig_mod.transformer.h.1.normAtt.weight
+  models.18._orig_mod.transformer.h.1.normMlp.weight
+  models.18._orig_mod.transformer.h.2.blockLambdas
+  models.18._orig_mod.transformer.h.2.attn.lambdas
+  models.18._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.18._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.18._orig_mod.transformer.h.2.attn.projQ.weight
+  models.18._orig_mod.transformer.h.2.attn.projK.weight
+  models.18._orig_mod.transformer.h.2.attn.projV.weight
+  models.18._orig_mod.transformer.h.2.attn.projOut.weight
+  models.18._orig_mod.transformer.h.2.mlp.fc.weight
+  models.18._orig_mod.transformer.h.2.mlp.proj.weight
+  models.18._orig_mod.transformer.h.2.normAtt.weight
+  models.18._orig_mod.transformer.h.2.normMlp.weight
+  models.18._orig_mod.transformer.h.3.blockLambdas
+  models.18._orig_mod.transformer.h.3.attn.lambdas
+  models.18._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.18._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.18._orig_mod.transformer.h.3.attn.projQ.weight
+  models.18._orig_mod.transformer.h.3.attn.projK.weight
+  models.18._orig_mod.transformer.h.3.attn.projV.weight
+  models.18._orig_mod.transformer.h.3.attn.projOut.weight
+  models.18._orig_mod.transformer.h.3.mlp.fc.weight
+  models.18._orig_mod.transformer.h.3.mlp.proj.weight
+  models.18._orig_mod.transformer.h.3.normAtt.weight
+  models.18._orig_mod.transformer.h.3.normMlp.weight
+  models.18._orig_mod.normWte.weight
+  models.18._orig_mod.normWte.bias
+Optimizer #19/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.19._orig_mod.skipWeights
+  models.19._orig_mod.transformer.wte.weight
+  models.19._orig_mod.transformer.h.0.blockLambdas
+  models.19._orig_mod.transformer.h.0.attn.lambdas
+  models.19._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.19._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.19._orig_mod.transformer.h.0.attn.projQ.weight
+  models.19._orig_mod.transformer.h.0.attn.projK.weight
+  models.19._orig_mod.transformer.h.0.attn.projV.weight
+  models.19._orig_mod.transformer.h.0.attn.projOut.weight
+  models.19._orig_mod.transformer.h.0.mlp.fc.weight
+  models.19._orig_mod.transformer.h.0.mlp.proj.weight
+  models.19._orig_mod.transformer.h.0.normAtt.weight
+  models.19._orig_mod.transformer.h.0.normMlp.weight
+  models.19._orig_mod.transformer.h.1.blockLambdas
+  models.19._orig_mod.transformer.h.1.attn.lambdas
+  models.19._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.19._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.19._orig_mod.transformer.h.1.attn.projQ.weight
+  models.19._orig_mod.transformer.h.1.attn.projK.weight
+  models.19._orig_mod.transformer.h.1.attn.projV.weight
+  models.19._orig_mod.transformer.h.1.attn.projOut.weight
+  models.19._orig_mod.transformer.h.1.mlp.fc.weight
+  models.19._orig_mod.transformer.h.1.mlp.proj.weight
+  models.19._orig_mod.transformer.h.1.normAtt.weight
+  models.19._orig_mod.transformer.h.1.normMlp.weight
+  models.19._orig_mod.transformer.h.2.blockLambdas
+  models.19._orig_mod.transformer.h.2.attn.lambdas
+  models.19._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.19._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.19._orig_mod.transformer.h.2.attn.projQ.weight
+  models.19._orig_mod.transformer.h.2.attn.projK.weight
+  models.19._orig_mod.transformer.h.2.attn.projV.weight
+  models.19._orig_mod.transformer.h.2.attn.projOut.weight
+  models.19._orig_mod.transformer.h.2.mlp.fc.weight
+  models.19._orig_mod.transformer.h.2.mlp.proj.weight
+  models.19._orig_mod.transformer.h.2.normAtt.weight
+  models.19._orig_mod.transformer.h.2.normMlp.weight
+  models.19._orig_mod.transformer.h.3.blockLambdas
+  models.19._orig_mod.transformer.h.3.attn.lambdas
+  models.19._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.19._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.19._orig_mod.transformer.h.3.attn.projQ.weight
+  models.19._orig_mod.transformer.h.3.attn.projK.weight
+  models.19._orig_mod.transformer.h.3.attn.projV.weight
+  models.19._orig_mod.transformer.h.3.attn.projOut.weight
+  models.19._orig_mod.transformer.h.3.mlp.fc.weight
+  models.19._orig_mod.transformer.h.3.mlp.proj.weight
+  models.19._orig_mod.transformer.h.3.normAtt.weight
+  models.19._orig_mod.transformer.h.3.normMlp.weight
+  models.19._orig_mod.normWte.weight
+  models.19._orig_mod.normWte.bias
+Optimizer #20/20: Adam
+  Param group 0: lr=0.1, weight_decay=0
+  models.0._orig_mod.transformer.h.0.mlp.af.afVals
+  models.0._orig_mod.transformer.h.1.mlp.af.afVals
+  models.0._orig_mod.transformer.h.2.mlp.af.afVals
+  models.0._orig_mod.transformer.h.3.mlp.af.afVals
+====================================================================================================
+Step 1/20000   lossVa 15.1172   accVa 0.0
+Step 1/20000   lossTr 15.1028   accTr 0.0   29s = 28.55s/step
+Step 1/20000   Activation magnitudes (2): 0.80 0.26 0.80 0.26 0.80 0.25 0.80 0.26
+Step 1/20000   Activation magnitudes (3): 5.05 1.66 5.05 1.79 5.05 1.83 5.05 1.55
+Step 6/20000   Peak CUDA memory usage: 2.781 GB
+Step 6/20000   lossTr 15.0794   accTr 0.1   46s = 3.52s/step
+Step 6/20000   Activation magnitudes (2): 0.80 0.26 0.80 0.25 0.80 0.25 0.80 0.26
+Step 6/20000   Activation magnitudes (3): 5.04 1.60 5.04 1.64 5.04 1.57 5.04 1.62
+Step 11/20000   Peak CUDA memory usage: 2.719 GB
+Hyperparameters:
+  runName = "optimizedMlp-layerSpecific-phase1"
+  seed = 1234
+  plotMinAcc = 0.0
+  plotMaxAcc = 0.4
+  plotMinLoss = 3.0
+  plotMaxLoss = 15.0
+  shuffleTrData = 1
+  tokenDocSep = 50256
+  dtype = torch.float32
+  flexBlockSize = 32
+  nLayers = 4
+  nHeads = 4
+  dimEmb = 256
+  tieEmbeddings = True
+  afType = ['spline', 'linear']
+  afLayerSpecific = 1
+  afRange = 15
+  afNAnchors = 64
+  afLr = 0.1
+  afInit = 0.01
+  afFileToLoad = ""
+  dirResults = "./results-fineweb10B"
+  filesTokensTr = "./data-fineweb10B/fineweb_train_*.bin"
+  filesTokensVa = "./data-fineweb10B/fineweb_val_*.bin"
+  filesTokensTe = ""
+  lr = 0.0006
+  freezeEmbeddings = 0
+  batchSize = 1
+  seqLength = 4096
+  nSteps = 20000
+  nStepsWarmup = 2000
+  nStepsCooldown = 10000
+  wtDecay = 0.0
+  nModels = 20
+  staggeredStarts = 2
+  sameDataAcrossModels = False
+  sameInitAcrossModels = False
+  adamB1 = 0.8
+  adamB2 = 0.95
+  afAdamB1 = 0.99
+  afAdamB2 = 0.999
+  gradientClipping = 0
+  contextSize = 1024
+  lrSchedule = "trap"
+  nTokensVa = 10485760
+  valEvery = 500
+  saveModelEvery = -1
+  saveAfEvery = 0
+  plotEvery = 200
+  plottingLevel = 2
+====================================================================================================
+pytorch 2.10.0.dev20251001+cu126, CUDA 12.6
+Thu Feb 12 23:22:03 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 566.07                 Driver Version: 566.07         CUDA Version: 12.7     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                  Driver-Model | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 4090 ...  WDDM  |   00000000:01:00.0 Off |                  N/A |
+| N/A   81C    P0             37W /  115W |     236MiB /  16376MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A     26296      C   ...nvs\modded-nanogpt-py312\python.exe      N/A      |
++-----------------------------------------------------------------------------------------+
+
+Tr data: 899,999,680 tokens, 9 files (./data-fineweb10B/fineweb_train_*.bin)
+Va data: 100,000,000 tokens, 1 files (./data-fineweb10B/fineweb_val_*.bin)
+Number of validation batches: 2,560 (10,485,760 tokens, 4,096 tokens/sequence)
+====================================================================================================
+Projected number of training tokens:
+  20,000 steps * 1 batchSize * 4,096 seqLength
+  = 81,920,000 tokens
+  = 0.09 epochs
+Vocabulary size: 50,304
+====================================================================================================
+Number of model parameters (frozen): 0
+Number of model parameters (trainable): 16,026,390
+  _orig_mod.skipWeights                              2
+  _orig_mod.transformer.wte.weight                   12,877,824
+  _orig_mod.transformer.h.0.blockLambdas             2
+  _orig_mod.transformer.h.0.attn.lambdas             1
+  _orig_mod.transformer.h.0.attn.projAtt.weight      1
+  _orig_mod.transformer.h.0.attn.projAtt.bias        1
+  _orig_mod.transformer.h.0.attn.projQ.weight        65,536
+  _orig_mod.transformer.h.0.attn.projK.weight        65,536
+  _orig_mod.transformer.h.0.attn.projV.weight        65,536
+  _orig_mod.transformer.h.0.attn.projOut.weight      65,536
+  _orig_mod.transformer.h.0.mlp.fc.weight            262,144
+  _orig_mod.transformer.h.0.mlp.proj.weight          262,144
+  _orig_mod.transformer.h.0.mlp.af.afVals            64
+  _orig_mod.transformer.h.0.normAtt.weight           256
+  _orig_mod.transformer.h.0.normMlp.weight           256
+  _orig_mod.transformer.h.1.blockLambdas             2
+  _orig_mod.transformer.h.1.attn.lambdas             1
+  _orig_mod.transformer.h.1.attn.projAtt.weight      1
+  _orig_mod.transformer.h.1.attn.projAtt.bias        1
+  _orig_mod.transformer.h.1.attn.projQ.weight        65,536
+  _orig_mod.transformer.h.1.attn.projK.weight        65,536
+  _orig_mod.transformer.h.1.attn.projV.weight        65,536
+  _orig_mod.transformer.h.1.attn.projOut.weight      65,536
+  _orig_mod.transformer.h.1.mlp.fc.weight            262,144
+  _orig_mod.transformer.h.1.mlp.proj.weight          262,144
+  _orig_mod.transformer.h.1.mlp.af.afVals            64
+  _orig_mod.transformer.h.1.normAtt.weight           256
+  _orig_mod.transformer.h.1.normMlp.weight           256
+  _orig_mod.transformer.h.2.blockLambdas             2
+  _orig_mod.transformer.h.2.attn.lambdas             1
+  _orig_mod.transformer.h.2.attn.projAtt.weight      1
+  _orig_mod.transformer.h.2.attn.projAtt.bias        1
+  _orig_mod.transformer.h.2.attn.projQ.weight        65,536
+  _orig_mod.transformer.h.2.attn.projK.weight        65,536
+  _orig_mod.transformer.h.2.attn.projV.weight        65,536
+  _orig_mod.transformer.h.2.attn.projOut.weight      65,536
+  _orig_mod.transformer.h.2.mlp.fc.weight            262,144
+  _orig_mod.transformer.h.2.mlp.proj.weight          262,144
+  _orig_mod.transformer.h.2.mlp.af.afVals            64
+  _orig_mod.transformer.h.2.normAtt.weight           256
+  _orig_mod.transformer.h.2.normMlp.weight           256
+  _orig_mod.transformer.h.3.blockLambdas             2
+  _orig_mod.transformer.h.3.attn.lambdas             1
+  _orig_mod.transformer.h.3.attn.projAtt.weight      1
+  _orig_mod.transformer.h.3.attn.projAtt.bias        1
+  _orig_mod.transformer.h.3.attn.projQ.weight        65,536
+  _orig_mod.transformer.h.3.attn.projK.weight        65,536
+  _orig_mod.transformer.h.3.attn.projV.weight        65,536
+  _orig_mod.transformer.h.3.attn.projOut.weight      65,536
+  _orig_mod.transformer.h.3.mlp.fc.weight            262,144
+  _orig_mod.transformer.h.3.mlp.proj.weight          262,144
+  _orig_mod.transformer.h.3.mlp.af.afVals            64
+  _orig_mod.transformer.h.3.normAtt.weight           256
+  _orig_mod.transformer.h.3.normMlp.weight           256
+  _orig_mod.normWte.weight                           256
+  _orig_mod.normWte.bias                             256
+5.1 tokens/parameter
+====================================================================================================
+Optimizer #0/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.0._orig_mod.skipWeights
+  models.0._orig_mod.transformer.wte.weight
+  models.0._orig_mod.transformer.h.0.blockLambdas
+  models.0._orig_mod.transformer.h.0.attn.lambdas
+  models.0._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.0._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.0._orig_mod.transformer.h.0.attn.projQ.weight
+  models.0._orig_mod.transformer.h.0.attn.projK.weight
+  models.0._orig_mod.transformer.h.0.attn.projV.weight
+  models.0._orig_mod.transformer.h.0.attn.projOut.weight
+  models.0._orig_mod.transformer.h.0.mlp.fc.weight
+  models.0._orig_mod.transformer.h.0.mlp.proj.weight
+  models.0._orig_mod.transformer.h.0.normAtt.weight
+  models.0._orig_mod.transformer.h.0.normMlp.weight
+  models.0._orig_mod.transformer.h.1.blockLambdas
+  models.0._orig_mod.transformer.h.1.attn.lambdas
+  models.0._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.0._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.0._orig_mod.transformer.h.1.attn.projQ.weight
+  models.0._orig_mod.transformer.h.1.attn.projK.weight
+  models.0._orig_mod.transformer.h.1.attn.projV.weight
+  models.0._orig_mod.transformer.h.1.attn.projOut.weight
+  models.0._orig_mod.transformer.h.1.mlp.fc.weight
+  models.0._orig_mod.transformer.h.1.mlp.proj.weight
+  models.0._orig_mod.transformer.h.1.normAtt.weight
+  models.0._orig_mod.transformer.h.1.normMlp.weight
+  models.0._orig_mod.transformer.h.2.blockLambdas
+  models.0._orig_mod.transformer.h.2.attn.lambdas
+  models.0._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.0._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.0._orig_mod.transformer.h.2.attn.projQ.weight
+  models.0._orig_mod.transformer.h.2.attn.projK.weight
+  models.0._orig_mod.transformer.h.2.attn.projV.weight
+  models.0._orig_mod.transformer.h.2.attn.projOut.weight
+  models.0._orig_mod.transformer.h.2.mlp.fc.weight
+  models.0._orig_mod.transformer.h.2.mlp.proj.weight
+  models.0._orig_mod.transformer.h.2.normAtt.weight
+  models.0._orig_mod.transformer.h.2.normMlp.weight
+  models.0._orig_mod.transformer.h.3.blockLambdas
+  models.0._orig_mod.transformer.h.3.attn.lambdas
+  models.0._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.0._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.0._orig_mod.transformer.h.3.attn.projQ.weight
+  models.0._orig_mod.transformer.h.3.attn.projK.weight
+  models.0._orig_mod.transformer.h.3.attn.projV.weight
+  models.0._orig_mod.transformer.h.3.attn.projOut.weight
+  models.0._orig_mod.transformer.h.3.mlp.fc.weight
+  models.0._orig_mod.transformer.h.3.mlp.proj.weight
+  models.0._orig_mod.transformer.h.3.normAtt.weight
+  models.0._orig_mod.transformer.h.3.normMlp.weight
+  models.0._orig_mod.normWte.weight
+  models.0._orig_mod.normWte.bias
+Optimizer #1/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.1._orig_mod.skipWeights
+  models.1._orig_mod.transformer.wte.weight
+  models.1._orig_mod.transformer.h.0.blockLambdas
+  models.1._orig_mod.transformer.h.0.attn.lambdas
+  models.1._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.1._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.1._orig_mod.transformer.h.0.attn.projQ.weight
+  models.1._orig_mod.transformer.h.0.attn.projK.weight
+  models.1._orig_mod.transformer.h.0.attn.projV.weight
+  models.1._orig_mod.transformer.h.0.attn.projOut.weight
+  models.1._orig_mod.transformer.h.0.mlp.fc.weight
+  models.1._orig_mod.transformer.h.0.mlp.proj.weight
+  models.1._orig_mod.transformer.h.0.normAtt.weight
+  models.1._orig_mod.transformer.h.0.normMlp.weight
+  models.1._orig_mod.transformer.h.1.blockLambdas
+  models.1._orig_mod.transformer.h.1.attn.lambdas
+  models.1._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.1._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.1._orig_mod.transformer.h.1.attn.projQ.weight
+  models.1._orig_mod.transformer.h.1.attn.projK.weight
+  models.1._orig_mod.transformer.h.1.attn.projV.weight
+  models.1._orig_mod.transformer.h.1.attn.projOut.weight
+  models.1._orig_mod.transformer.h.1.mlp.fc.weight
+  models.1._orig_mod.transformer.h.1.mlp.proj.weight
+  models.1._orig_mod.transformer.h.1.normAtt.weight
+  models.1._orig_mod.transformer.h.1.normMlp.weight
+  models.1._orig_mod.transformer.h.2.blockLambdas
+  models.1._orig_mod.transformer.h.2.attn.lambdas
+  models.1._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.1._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.1._orig_mod.transformer.h.2.attn.projQ.weight
+  models.1._orig_mod.transformer.h.2.attn.projK.weight
+  models.1._orig_mod.transformer.h.2.attn.projV.weight
+  models.1._orig_mod.transformer.h.2.attn.projOut.weight
+  models.1._orig_mod.transformer.h.2.mlp.fc.weight
+  models.1._orig_mod.transformer.h.2.mlp.proj.weight
+  models.1._orig_mod.transformer.h.2.normAtt.weight
+  models.1._orig_mod.transformer.h.2.normMlp.weight
+  models.1._orig_mod.transformer.h.3.blockLambdas
+  models.1._orig_mod.transformer.h.3.attn.lambdas
+  models.1._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.1._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.1._orig_mod.transformer.h.3.attn.projQ.weight
+  models.1._orig_mod.transformer.h.3.attn.projK.weight
+  models.1._orig_mod.transformer.h.3.attn.projV.weight
+  models.1._orig_mod.transformer.h.3.attn.projOut.weight
+  models.1._orig_mod.transformer.h.3.mlp.fc.weight
+  models.1._orig_mod.transformer.h.3.mlp.proj.weight
+  models.1._orig_mod.transformer.h.3.normAtt.weight
+  models.1._orig_mod.transformer.h.3.normMlp.weight
+  models.1._orig_mod.normWte.weight
+  models.1._orig_mod.normWte.bias
+Optimizer #2/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.2._orig_mod.skipWeights
+  models.2._orig_mod.transformer.wte.weight
+  models.2._orig_mod.transformer.h.0.blockLambdas
+  models.2._orig_mod.transformer.h.0.attn.lambdas
+  models.2._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.2._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.2._orig_mod.transformer.h.0.attn.projQ.weight
+  models.2._orig_mod.transformer.h.0.attn.projK.weight
+  models.2._orig_mod.transformer.h.0.attn.projV.weight
+  models.2._orig_mod.transformer.h.0.attn.projOut.weight
+  models.2._orig_mod.transformer.h.0.mlp.fc.weight
+  models.2._orig_mod.transformer.h.0.mlp.proj.weight
+  models.2._orig_mod.transformer.h.0.normAtt.weight
+  models.2._orig_mod.transformer.h.0.normMlp.weight
+  models.2._orig_mod.transformer.h.1.blockLambdas
+  models.2._orig_mod.transformer.h.1.attn.lambdas
+  models.2._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.2._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.2._orig_mod.transformer.h.1.attn.projQ.weight
+  models.2._orig_mod.transformer.h.1.attn.projK.weight
+  models.2._orig_mod.transformer.h.1.attn.projV.weight
+  models.2._orig_mod.transformer.h.1.attn.projOut.weight
+  models.2._orig_mod.transformer.h.1.mlp.fc.weight
+  models.2._orig_mod.transformer.h.1.mlp.proj.weight
+  models.2._orig_mod.transformer.h.1.normAtt.weight
+  models.2._orig_mod.transformer.h.1.normMlp.weight
+  models.2._orig_mod.transformer.h.2.blockLambdas
+  models.2._orig_mod.transformer.h.2.attn.lambdas
+  models.2._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.2._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.2._orig_mod.transformer.h.2.attn.projQ.weight
+  models.2._orig_mod.transformer.h.2.attn.projK.weight
+  models.2._orig_mod.transformer.h.2.attn.projV.weight
+  models.2._orig_mod.transformer.h.2.attn.projOut.weight
+  models.2._orig_mod.transformer.h.2.mlp.fc.weight
+  models.2._orig_mod.transformer.h.2.mlp.proj.weight
+  models.2._orig_mod.transformer.h.2.normAtt.weight
+  models.2._orig_mod.transformer.h.2.normMlp.weight
+  models.2._orig_mod.transformer.h.3.blockLambdas
+  models.2._orig_mod.transformer.h.3.attn.lambdas
+  models.2._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.2._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.2._orig_mod.transformer.h.3.attn.projQ.weight
+  models.2._orig_mod.transformer.h.3.attn.projK.weight
+  models.2._orig_mod.transformer.h.3.attn.projV.weight
+  models.2._orig_mod.transformer.h.3.attn.projOut.weight
+  models.2._orig_mod.transformer.h.3.mlp.fc.weight
+  models.2._orig_mod.transformer.h.3.mlp.proj.weight
+  models.2._orig_mod.transformer.h.3.normAtt.weight
+  models.2._orig_mod.transformer.h.3.normMlp.weight
+  models.2._orig_mod.normWte.weight
+  models.2._orig_mod.normWte.bias
+Optimizer #3/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.3._orig_mod.skipWeights
+  models.3._orig_mod.transformer.wte.weight
+  models.3._orig_mod.transformer.h.0.blockLambdas
+  models.3._orig_mod.transformer.h.0.attn.lambdas
+  models.3._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.3._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.3._orig_mod.transformer.h.0.attn.projQ.weight
+  models.3._orig_mod.transformer.h.0.attn.projK.weight
+  models.3._orig_mod.transformer.h.0.attn.projV.weight
+  models.3._orig_mod.transformer.h.0.attn.projOut.weight
+  models.3._orig_mod.transformer.h.0.mlp.fc.weight
+  models.3._orig_mod.transformer.h.0.mlp.proj.weight
+  models.3._orig_mod.transformer.h.0.normAtt.weight
+  models.3._orig_mod.transformer.h.0.normMlp.weight
+  models.3._orig_mod.transformer.h.1.blockLambdas
+  models.3._orig_mod.transformer.h.1.attn.lambdas
+  models.3._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.3._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.3._orig_mod.transformer.h.1.attn.projQ.weight
+  models.3._orig_mod.transformer.h.1.attn.projK.weight
+  models.3._orig_mod.transformer.h.1.attn.projV.weight
+  models.3._orig_mod.transformer.h.1.attn.projOut.weight
+  models.3._orig_mod.transformer.h.1.mlp.fc.weight
+  models.3._orig_mod.transformer.h.1.mlp.proj.weight
+  models.3._orig_mod.transformer.h.1.normAtt.weight
+  models.3._orig_mod.transformer.h.1.normMlp.weight
+  models.3._orig_mod.transformer.h.2.blockLambdas
+  models.3._orig_mod.transformer.h.2.attn.lambdas
+  models.3._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.3._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.3._orig_mod.transformer.h.2.attn.projQ.weight
+  models.3._orig_mod.transformer.h.2.attn.projK.weight
+  models.3._orig_mod.transformer.h.2.attn.projV.weight
+  models.3._orig_mod.transformer.h.2.attn.projOut.weight
+  models.3._orig_mod.transformer.h.2.mlp.fc.weight
+  models.3._orig_mod.transformer.h.2.mlp.proj.weight
+  models.3._orig_mod.transformer.h.2.normAtt.weight
+  models.3._orig_mod.transformer.h.2.normMlp.weight
+  models.3._orig_mod.transformer.h.3.blockLambdas
+  models.3._orig_mod.transformer.h.3.attn.lambdas
+  models.3._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.3._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.3._orig_mod.transformer.h.3.attn.projQ.weight
+  models.3._orig_mod.transformer.h.3.attn.projK.weight
+  models.3._orig_mod.transformer.h.3.attn.projV.weight
+  models.3._orig_mod.transformer.h.3.attn.projOut.weight
+  models.3._orig_mod.transformer.h.3.mlp.fc.weight
+  models.3._orig_mod.transformer.h.3.mlp.proj.weight
+  models.3._orig_mod.transformer.h.3.normAtt.weight
+  models.3._orig_mod.transformer.h.3.normMlp.weight
+  models.3._orig_mod.normWte.weight
+  models.3._orig_mod.normWte.bias
+Optimizer #4/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.4._orig_mod.skipWeights
+  models.4._orig_mod.transformer.wte.weight
+  models.4._orig_mod.transformer.h.0.blockLambdas
+  models.4._orig_mod.transformer.h.0.attn.lambdas
+  models.4._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.4._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.4._orig_mod.transformer.h.0.attn.projQ.weight
+  models.4._orig_mod.transformer.h.0.attn.projK.weight
+  models.4._orig_mod.transformer.h.0.attn.projV.weight
+  models.4._orig_mod.transformer.h.0.attn.projOut.weight
+  models.4._orig_mod.transformer.h.0.mlp.fc.weight
+  models.4._orig_mod.transformer.h.0.mlp.proj.weight
+  models.4._orig_mod.transformer.h.0.normAtt.weight
+  models.4._orig_mod.transformer.h.0.normMlp.weight
+  models.4._orig_mod.transformer.h.1.blockLambdas
+  models.4._orig_mod.transformer.h.1.attn.lambdas
+  models.4._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.4._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.4._orig_mod.transformer.h.1.attn.projQ.weight
+  models.4._orig_mod.transformer.h.1.attn.projK.weight
+  models.4._orig_mod.transformer.h.1.attn.projV.weight
+  models.4._orig_mod.transformer.h.1.attn.projOut.weight
+  models.4._orig_mod.transformer.h.1.mlp.fc.weight
+  models.4._orig_mod.transformer.h.1.mlp.proj.weight
+  models.4._orig_mod.transformer.h.1.normAtt.weight
+  models.4._orig_mod.transformer.h.1.normMlp.weight
+  models.4._orig_mod.transformer.h.2.blockLambdas
+  models.4._orig_mod.transformer.h.2.attn.lambdas
+  models.4._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.4._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.4._orig_mod.transformer.h.2.attn.projQ.weight
+  models.4._orig_mod.transformer.h.2.attn.projK.weight
+  models.4._orig_mod.transformer.h.2.attn.projV.weight
+  models.4._orig_mod.transformer.h.2.attn.projOut.weight
+  models.4._orig_mod.transformer.h.2.mlp.fc.weight
+  models.4._orig_mod.transformer.h.2.mlp.proj.weight
+  models.4._orig_mod.transformer.h.2.normAtt.weight
+  models.4._orig_mod.transformer.h.2.normMlp.weight
+  models.4._orig_mod.transformer.h.3.blockLambdas
+  models.4._orig_mod.transformer.h.3.attn.lambdas
+  models.4._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.4._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.4._orig_mod.transformer.h.3.attn.projQ.weight
+  models.4._orig_mod.transformer.h.3.attn.projK.weight
+  models.4._orig_mod.transformer.h.3.attn.projV.weight
+  models.4._orig_mod.transformer.h.3.attn.projOut.weight
+  models.4._orig_mod.transformer.h.3.mlp.fc.weight
+  models.4._orig_mod.transformer.h.3.mlp.proj.weight
+  models.4._orig_mod.transformer.h.3.normAtt.weight
+  models.4._orig_mod.transformer.h.3.normMlp.weight
+  models.4._orig_mod.normWte.weight
+  models.4._orig_mod.normWte.bias
+Optimizer #5/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.5._orig_mod.skipWeights
+  models.5._orig_mod.transformer.wte.weight
+  models.5._orig_mod.transformer.h.0.blockLambdas
+  models.5._orig_mod.transformer.h.0.attn.lambdas
+  models.5._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.5._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.5._orig_mod.transformer.h.0.attn.projQ.weight
+  models.5._orig_mod.transformer.h.0.attn.projK.weight
+  models.5._orig_mod.transformer.h.0.attn.projV.weight
+  models.5._orig_mod.transformer.h.0.attn.projOut.weight
+  models.5._orig_mod.transformer.h.0.mlp.fc.weight
+  models.5._orig_mod.transformer.h.0.mlp.proj.weight
+  models.5._orig_mod.transformer.h.0.normAtt.weight
+  models.5._orig_mod.transformer.h.0.normMlp.weight
+  models.5._orig_mod.transformer.h.1.blockLambdas
+  models.5._orig_mod.transformer.h.1.attn.lambdas
+  models.5._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.5._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.5._orig_mod.transformer.h.1.attn.projQ.weight
+  models.5._orig_mod.transformer.h.1.attn.projK.weight
+  models.5._orig_mod.transformer.h.1.attn.projV.weight
+  models.5._orig_mod.transformer.h.1.attn.projOut.weight
+  models.5._orig_mod.transformer.h.1.mlp.fc.weight
+  models.5._orig_mod.transformer.h.1.mlp.proj.weight
+  models.5._orig_mod.transformer.h.1.normAtt.weight
+  models.5._orig_mod.transformer.h.1.normMlp.weight
+  models.5._orig_mod.transformer.h.2.blockLambdas
+  models.5._orig_mod.transformer.h.2.attn.lambdas
+  models.5._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.5._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.5._orig_mod.transformer.h.2.attn.projQ.weight
+  models.5._orig_mod.transformer.h.2.attn.projK.weight
+  models.5._orig_mod.transformer.h.2.attn.projV.weight
+  models.5._orig_mod.transformer.h.2.attn.projOut.weight
+  models.5._orig_mod.transformer.h.2.mlp.fc.weight
+  models.5._orig_mod.transformer.h.2.mlp.proj.weight
+  models.5._orig_mod.transformer.h.2.normAtt.weight
+  models.5._orig_mod.transformer.h.2.normMlp.weight
+  models.5._orig_mod.transformer.h.3.blockLambdas
+  models.5._orig_mod.transformer.h.3.attn.lambdas
+  models.5._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.5._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.5._orig_mod.transformer.h.3.attn.projQ.weight
+  models.5._orig_mod.transformer.h.3.attn.projK.weight
+  models.5._orig_mod.transformer.h.3.attn.projV.weight
+  models.5._orig_mod.transformer.h.3.attn.projOut.weight
+  models.5._orig_mod.transformer.h.3.mlp.fc.weight
+  models.5._orig_mod.transformer.h.3.mlp.proj.weight
+  models.5._orig_mod.transformer.h.3.normAtt.weight
+  models.5._orig_mod.transformer.h.3.normMlp.weight
+  models.5._orig_mod.normWte.weight
+  models.5._orig_mod.normWte.bias
+Optimizer #6/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.6._orig_mod.skipWeights
+  models.6._orig_mod.transformer.wte.weight
+  models.6._orig_mod.transformer.h.0.blockLambdas
+  models.6._orig_mod.transformer.h.0.attn.lambdas
+  models.6._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.6._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.6._orig_mod.transformer.h.0.attn.projQ.weight
+  models.6._orig_mod.transformer.h.0.attn.projK.weight
+  models.6._orig_mod.transformer.h.0.attn.projV.weight
+  models.6._orig_mod.transformer.h.0.attn.projOut.weight
+  models.6._orig_mod.transformer.h.0.mlp.fc.weight
+  models.6._orig_mod.transformer.h.0.mlp.proj.weight
+  models.6._orig_mod.transformer.h.0.normAtt.weight
+  models.6._orig_mod.transformer.h.0.normMlp.weight
+  models.6._orig_mod.transformer.h.1.blockLambdas
+  models.6._orig_mod.transformer.h.1.attn.lambdas
+  models.6._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.6._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.6._orig_mod.transformer.h.1.attn.projQ.weight
+  models.6._orig_mod.transformer.h.1.attn.projK.weight
+  models.6._orig_mod.transformer.h.1.attn.projV.weight
+  models.6._orig_mod.transformer.h.1.attn.projOut.weight
+  models.6._orig_mod.transformer.h.1.mlp.fc.weight
+  models.6._orig_mod.transformer.h.1.mlp.proj.weight
+  models.6._orig_mod.transformer.h.1.normAtt.weight
+  models.6._orig_mod.transformer.h.1.normMlp.weight
+  models.6._orig_mod.transformer.h.2.blockLambdas
+  models.6._orig_mod.transformer.h.2.attn.lambdas
+  models.6._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.6._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.6._orig_mod.transformer.h.2.attn.projQ.weight
+  models.6._orig_mod.transformer.h.2.attn.projK.weight
+  models.6._orig_mod.transformer.h.2.attn.projV.weight
+  models.6._orig_mod.transformer.h.2.attn.projOut.weight
+  models.6._orig_mod.transformer.h.2.mlp.fc.weight
+  models.6._orig_mod.transformer.h.2.mlp.proj.weight
+  models.6._orig_mod.transformer.h.2.normAtt.weight
+  models.6._orig_mod.transformer.h.2.normMlp.weight
+  models.6._orig_mod.transformer.h.3.blockLambdas
+  models.6._orig_mod.transformer.h.3.attn.lambdas
+  models.6._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.6._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.6._orig_mod.transformer.h.3.attn.projQ.weight
+  models.6._orig_mod.transformer.h.3.attn.projK.weight
+  models.6._orig_mod.transformer.h.3.attn.projV.weight
+  models.6._orig_mod.transformer.h.3.attn.projOut.weight
+  models.6._orig_mod.transformer.h.3.mlp.fc.weight
+  models.6._orig_mod.transformer.h.3.mlp.proj.weight
+  models.6._orig_mod.transformer.h.3.normAtt.weight
+  models.6._orig_mod.transformer.h.3.normMlp.weight
+  models.6._orig_mod.normWte.weight
+  models.6._orig_mod.normWte.bias
+Optimizer #7/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.7._orig_mod.skipWeights
+  models.7._orig_mod.transformer.wte.weight
+  models.7._orig_mod.transformer.h.0.blockLambdas
+  models.7._orig_mod.transformer.h.0.attn.lambdas
+  models.7._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.7._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.7._orig_mod.transformer.h.0.attn.projQ.weight
+  models.7._orig_mod.transformer.h.0.attn.projK.weight
+  models.7._orig_mod.transformer.h.0.attn.projV.weight
+  models.7._orig_mod.transformer.h.0.attn.projOut.weight
+  models.7._orig_mod.transformer.h.0.mlp.fc.weight
+  models.7._orig_mod.transformer.h.0.mlp.proj.weight
+  models.7._orig_mod.transformer.h.0.normAtt.weight
+  models.7._orig_mod.transformer.h.0.normMlp.weight
+  models.7._orig_mod.transformer.h.1.blockLambdas
+  models.7._orig_mod.transformer.h.1.attn.lambdas
+  models.7._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.7._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.7._orig_mod.transformer.h.1.attn.projQ.weight
+  models.7._orig_mod.transformer.h.1.attn.projK.weight
+  models.7._orig_mod.transformer.h.1.attn.projV.weight
+  models.7._orig_mod.transformer.h.1.attn.projOut.weight
+  models.7._orig_mod.transformer.h.1.mlp.fc.weight
+  models.7._orig_mod.transformer.h.1.mlp.proj.weight
+  models.7._orig_mod.transformer.h.1.normAtt.weight
+  models.7._orig_mod.transformer.h.1.normMlp.weight
+  models.7._orig_mod.transformer.h.2.blockLambdas
+  models.7._orig_mod.transformer.h.2.attn.lambdas
+  models.7._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.7._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.7._orig_mod.transformer.h.2.attn.projQ.weight
+  models.7._orig_mod.transformer.h.2.attn.projK.weight
+  models.7._orig_mod.transformer.h.2.attn.projV.weight
+  models.7._orig_mod.transformer.h.2.attn.projOut.weight
+  models.7._orig_mod.transformer.h.2.mlp.fc.weight
+  models.7._orig_mod.transformer.h.2.mlp.proj.weight
+  models.7._orig_mod.transformer.h.2.normAtt.weight
+  models.7._orig_mod.transformer.h.2.normMlp.weight
+  models.7._orig_mod.transformer.h.3.blockLambdas
+  models.7._orig_mod.transformer.h.3.attn.lambdas
+  models.7._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.7._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.7._orig_mod.transformer.h.3.attn.projQ.weight
+  models.7._orig_mod.transformer.h.3.attn.projK.weight
+  models.7._orig_mod.transformer.h.3.attn.projV.weight
+  models.7._orig_mod.transformer.h.3.attn.projOut.weight
+  models.7._orig_mod.transformer.h.3.mlp.fc.weight
+  models.7._orig_mod.transformer.h.3.mlp.proj.weight
+  models.7._orig_mod.transformer.h.3.normAtt.weight
+  models.7._orig_mod.transformer.h.3.normMlp.weight
+  models.7._orig_mod.normWte.weight
+  models.7._orig_mod.normWte.bias
+Optimizer #8/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.8._orig_mod.skipWeights
+  models.8._orig_mod.transformer.wte.weight
+  models.8._orig_mod.transformer.h.0.blockLambdas
+  models.8._orig_mod.transformer.h.0.attn.lambdas
+  models.8._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.8._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.8._orig_mod.transformer.h.0.attn.projQ.weight
+  models.8._orig_mod.transformer.h.0.attn.projK.weight
+  models.8._orig_mod.transformer.h.0.attn.projV.weight
+  models.8._orig_mod.transformer.h.0.attn.projOut.weight
+  models.8._orig_mod.transformer.h.0.mlp.fc.weight
+  models.8._orig_mod.transformer.h.0.mlp.proj.weight
+  models.8._orig_mod.transformer.h.0.normAtt.weight
+  models.8._orig_mod.transformer.h.0.normMlp.weight
+  models.8._orig_mod.transformer.h.1.blockLambdas
+  models.8._orig_mod.transformer.h.1.attn.lambdas
+  models.8._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.8._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.8._orig_mod.transformer.h.1.attn.projQ.weight
+  models.8._orig_mod.transformer.h.1.attn.projK.weight
+  models.8._orig_mod.transformer.h.1.attn.projV.weight
+  models.8._orig_mod.transformer.h.1.attn.projOut.weight
+  models.8._orig_mod.transformer.h.1.mlp.fc.weight
+  models.8._orig_mod.transformer.h.1.mlp.proj.weight
+  models.8._orig_mod.transformer.h.1.normAtt.weight
+  models.8._orig_mod.transformer.h.1.normMlp.weight
+  models.8._orig_mod.transformer.h.2.blockLambdas
+  models.8._orig_mod.transformer.h.2.attn.lambdas
+  models.8._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.8._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.8._orig_mod.transformer.h.2.attn.projQ.weight
+  models.8._orig_mod.transformer.h.2.attn.projK.weight
+  models.8._orig_mod.transformer.h.2.attn.projV.weight
+  models.8._orig_mod.transformer.h.2.attn.projOut.weight
+  models.8._orig_mod.transformer.h.2.mlp.fc.weight
+  models.8._orig_mod.transformer.h.2.mlp.proj.weight
+  models.8._orig_mod.transformer.h.2.normAtt.weight
+  models.8._orig_mod.transformer.h.2.normMlp.weight
+  models.8._orig_mod.transformer.h.3.blockLambdas
+  models.8._orig_mod.transformer.h.3.attn.lambdas
+  models.8._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.8._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.8._orig_mod.transformer.h.3.attn.projQ.weight
+  models.8._orig_mod.transformer.h.3.attn.projK.weight
+  models.8._orig_mod.transformer.h.3.attn.projV.weight
+  models.8._orig_mod.transformer.h.3.attn.projOut.weight
+  models.8._orig_mod.transformer.h.3.mlp.fc.weight
+  models.8._orig_mod.transformer.h.3.mlp.proj.weight
+  models.8._orig_mod.transformer.h.3.normAtt.weight
+  models.8._orig_mod.transformer.h.3.normMlp.weight
+  models.8._orig_mod.normWte.weight
+  models.8._orig_mod.normWte.bias
+Optimizer #9/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.9._orig_mod.skipWeights
+  models.9._orig_mod.transformer.wte.weight
+  models.9._orig_mod.transformer.h.0.blockLambdas
+  models.9._orig_mod.transformer.h.0.attn.lambdas
+  models.9._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.9._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.9._orig_mod.transformer.h.0.attn.projQ.weight
+  models.9._orig_mod.transformer.h.0.attn.projK.weight
+  models.9._orig_mod.transformer.h.0.attn.projV.weight
+  models.9._orig_mod.transformer.h.0.attn.projOut.weight
+  models.9._orig_mod.transformer.h.0.mlp.fc.weight
+  models.9._orig_mod.transformer.h.0.mlp.proj.weight
+  models.9._orig_mod.transformer.h.0.normAtt.weight
+  models.9._orig_mod.transformer.h.0.normMlp.weight
+  models.9._orig_mod.transformer.h.1.blockLambdas
+  models.9._orig_mod.transformer.h.1.attn.lambdas
+  models.9._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.9._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.9._orig_mod.transformer.h.1.attn.projQ.weight
+  models.9._orig_mod.transformer.h.1.attn.projK.weight
+  models.9._orig_mod.transformer.h.1.attn.projV.weight
+  models.9._orig_mod.transformer.h.1.attn.projOut.weight
+  models.9._orig_mod.transformer.h.1.mlp.fc.weight
+  models.9._orig_mod.transformer.h.1.mlp.proj.weight
+  models.9._orig_mod.transformer.h.1.normAtt.weight
+  models.9._orig_mod.transformer.h.1.normMlp.weight
+  models.9._orig_mod.transformer.h.2.blockLambdas
+  models.9._orig_mod.transformer.h.2.attn.lambdas
+  models.9._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.9._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.9._orig_mod.transformer.h.2.attn.projQ.weight
+  models.9._orig_mod.transformer.h.2.attn.projK.weight
+  models.9._orig_mod.transformer.h.2.attn.projV.weight
+  models.9._orig_mod.transformer.h.2.attn.projOut.weight
+  models.9._orig_mod.transformer.h.2.mlp.fc.weight
+  models.9._orig_mod.transformer.h.2.mlp.proj.weight
+  models.9._orig_mod.transformer.h.2.normAtt.weight
+  models.9._orig_mod.transformer.h.2.normMlp.weight
+  models.9._orig_mod.transformer.h.3.blockLambdas
+  models.9._orig_mod.transformer.h.3.attn.lambdas
+  models.9._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.9._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.9._orig_mod.transformer.h.3.attn.projQ.weight
+  models.9._orig_mod.transformer.h.3.attn.projK.weight
+  models.9._orig_mod.transformer.h.3.attn.projV.weight
+  models.9._orig_mod.transformer.h.3.attn.projOut.weight
+  models.9._orig_mod.transformer.h.3.mlp.fc.weight
+  models.9._orig_mod.transformer.h.3.mlp.proj.weight
+  models.9._orig_mod.transformer.h.3.normAtt.weight
+  models.9._orig_mod.transformer.h.3.normMlp.weight
+  models.9._orig_mod.normWte.weight
+  models.9._orig_mod.normWte.bias
+Optimizer #10/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.10._orig_mod.skipWeights
+  models.10._orig_mod.transformer.wte.weight
+  models.10._orig_mod.transformer.h.0.blockLambdas
+  models.10._orig_mod.transformer.h.0.attn.lambdas
+  models.10._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.10._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.10._orig_mod.transformer.h.0.attn.projQ.weight
+  models.10._orig_mod.transformer.h.0.attn.projK.weight
+  models.10._orig_mod.transformer.h.0.attn.projV.weight
+  models.10._orig_mod.transformer.h.0.attn.projOut.weight
+  models.10._orig_mod.transformer.h.0.mlp.fc.weight
+  models.10._orig_mod.transformer.h.0.mlp.proj.weight
+  models.10._orig_mod.transformer.h.0.normAtt.weight
+  models.10._orig_mod.transformer.h.0.normMlp.weight
+  models.10._orig_mod.transformer.h.1.blockLambdas
+  models.10._orig_mod.transformer.h.1.attn.lambdas
+  models.10._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.10._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.10._orig_mod.transformer.h.1.attn.projQ.weight
+  models.10._orig_mod.transformer.h.1.attn.projK.weight
+  models.10._orig_mod.transformer.h.1.attn.projV.weight
+  models.10._orig_mod.transformer.h.1.attn.projOut.weight
+  models.10._orig_mod.transformer.h.1.mlp.fc.weight
+  models.10._orig_mod.transformer.h.1.mlp.proj.weight
+  models.10._orig_mod.transformer.h.1.normAtt.weight
+  models.10._orig_mod.transformer.h.1.normMlp.weight
+  models.10._orig_mod.transformer.h.2.blockLambdas
+  models.10._orig_mod.transformer.h.2.attn.lambdas
+  models.10._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.10._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.10._orig_mod.transformer.h.2.attn.projQ.weight
+  models.10._orig_mod.transformer.h.2.attn.projK.weight
+  models.10._orig_mod.transformer.h.2.attn.projV.weight
+  models.10._orig_mod.transformer.h.2.attn.projOut.weight
+  models.10._orig_mod.transformer.h.2.mlp.fc.weight
+  models.10._orig_mod.transformer.h.2.mlp.proj.weight
+  models.10._orig_mod.transformer.h.2.normAtt.weight
+  models.10._orig_mod.transformer.h.2.normMlp.weight
+  models.10._orig_mod.transformer.h.3.blockLambdas
+  models.10._orig_mod.transformer.h.3.attn.lambdas
+  models.10._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.10._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.10._orig_mod.transformer.h.3.attn.projQ.weight
+  models.10._orig_mod.transformer.h.3.attn.projK.weight
+  models.10._orig_mod.transformer.h.3.attn.projV.weight
+  models.10._orig_mod.transformer.h.3.attn.projOut.weight
+  models.10._orig_mod.transformer.h.3.mlp.fc.weight
+  models.10._orig_mod.transformer.h.3.mlp.proj.weight
+  models.10._orig_mod.transformer.h.3.normAtt.weight
+  models.10._orig_mod.transformer.h.3.normMlp.weight
+  models.10._orig_mod.normWte.weight
+  models.10._orig_mod.normWte.bias
+Optimizer #11/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.11._orig_mod.skipWeights
+  models.11._orig_mod.transformer.wte.weight
+  models.11._orig_mod.transformer.h.0.blockLambdas
+  models.11._orig_mod.transformer.h.0.attn.lambdas
+  models.11._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.11._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.11._orig_mod.transformer.h.0.attn.projQ.weight
+  models.11._orig_mod.transformer.h.0.attn.projK.weight
+  models.11._orig_mod.transformer.h.0.attn.projV.weight
+  models.11._orig_mod.transformer.h.0.attn.projOut.weight
+  models.11._orig_mod.transformer.h.0.mlp.fc.weight
+  models.11._orig_mod.transformer.h.0.mlp.proj.weight
+  models.11._orig_mod.transformer.h.0.normAtt.weight
+  models.11._orig_mod.transformer.h.0.normMlp.weight
+  models.11._orig_mod.transformer.h.1.blockLambdas
+  models.11._orig_mod.transformer.h.1.attn.lambdas
+  models.11._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.11._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.11._orig_mod.transformer.h.1.attn.projQ.weight
+  models.11._orig_mod.transformer.h.1.attn.projK.weight
+  models.11._orig_mod.transformer.h.1.attn.projV.weight
+  models.11._orig_mod.transformer.h.1.attn.projOut.weight
+  models.11._orig_mod.transformer.h.1.mlp.fc.weight
+  models.11._orig_mod.transformer.h.1.mlp.proj.weight
+  models.11._orig_mod.transformer.h.1.normAtt.weight
+  models.11._orig_mod.transformer.h.1.normMlp.weight
+  models.11._orig_mod.transformer.h.2.blockLambdas
+  models.11._orig_mod.transformer.h.2.attn.lambdas
+  models.11._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.11._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.11._orig_mod.transformer.h.2.attn.projQ.weight
+  models.11._orig_mod.transformer.h.2.attn.projK.weight
+  models.11._orig_mod.transformer.h.2.attn.projV.weight
+  models.11._orig_mod.transformer.h.2.attn.projOut.weight
+  models.11._orig_mod.transformer.h.2.mlp.fc.weight
+  models.11._orig_mod.transformer.h.2.mlp.proj.weight
+  models.11._orig_mod.transformer.h.2.normAtt.weight
+  models.11._orig_mod.transformer.h.2.normMlp.weight
+  models.11._orig_mod.transformer.h.3.blockLambdas
+  models.11._orig_mod.transformer.h.3.attn.lambdas
+  models.11._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.11._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.11._orig_mod.transformer.h.3.attn.projQ.weight
+  models.11._orig_mod.transformer.h.3.attn.projK.weight
+  models.11._orig_mod.transformer.h.3.attn.projV.weight
+  models.11._orig_mod.transformer.h.3.attn.projOut.weight
+  models.11._orig_mod.transformer.h.3.mlp.fc.weight
+  models.11._orig_mod.transformer.h.3.mlp.proj.weight
+  models.11._orig_mod.transformer.h.3.normAtt.weight
+  models.11._orig_mod.transformer.h.3.normMlp.weight
+  models.11._orig_mod.normWte.weight
+  models.11._orig_mod.normWte.bias
+Optimizer #12/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.12._orig_mod.skipWeights
+  models.12._orig_mod.transformer.wte.weight
+  models.12._orig_mod.transformer.h.0.blockLambdas
+  models.12._orig_mod.transformer.h.0.attn.lambdas
+  models.12._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.12._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.12._orig_mod.transformer.h.0.attn.projQ.weight
+  models.12._orig_mod.transformer.h.0.attn.projK.weight
+  models.12._orig_mod.transformer.h.0.attn.projV.weight
+  models.12._orig_mod.transformer.h.0.attn.projOut.weight
+  models.12._orig_mod.transformer.h.0.mlp.fc.weight
+  models.12._orig_mod.transformer.h.0.mlp.proj.weight
+  models.12._orig_mod.transformer.h.0.normAtt.weight
+  models.12._orig_mod.transformer.h.0.normMlp.weight
+  models.12._orig_mod.transformer.h.1.blockLambdas
+  models.12._orig_mod.transformer.h.1.attn.lambdas
+  models.12._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.12._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.12._orig_mod.transformer.h.1.attn.projQ.weight
+  models.12._orig_mod.transformer.h.1.attn.projK.weight
+  models.12._orig_mod.transformer.h.1.attn.projV.weight
+  models.12._orig_mod.transformer.h.1.attn.projOut.weight
+  models.12._orig_mod.transformer.h.1.mlp.fc.weight
+  models.12._orig_mod.transformer.h.1.mlp.proj.weight
+  models.12._orig_mod.transformer.h.1.normAtt.weight
+  models.12._orig_mod.transformer.h.1.normMlp.weight
+  models.12._orig_mod.transformer.h.2.blockLambdas
+  models.12._orig_mod.transformer.h.2.attn.lambdas
+  models.12._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.12._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.12._orig_mod.transformer.h.2.attn.projQ.weight
+  models.12._orig_mod.transformer.h.2.attn.projK.weight
+  models.12._orig_mod.transformer.h.2.attn.projV.weight
+  models.12._orig_mod.transformer.h.2.attn.projOut.weight
+  models.12._orig_mod.transformer.h.2.mlp.fc.weight
+  models.12._orig_mod.transformer.h.2.mlp.proj.weight
+  models.12._orig_mod.transformer.h.2.normAtt.weight
+  models.12._orig_mod.transformer.h.2.normMlp.weight
+  models.12._orig_mod.transformer.h.3.blockLambdas
+  models.12._orig_mod.transformer.h.3.attn.lambdas
+  models.12._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.12._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.12._orig_mod.transformer.h.3.attn.projQ.weight
+  models.12._orig_mod.transformer.h.3.attn.projK.weight
+  models.12._orig_mod.transformer.h.3.attn.projV.weight
+  models.12._orig_mod.transformer.h.3.attn.projOut.weight
+  models.12._orig_mod.transformer.h.3.mlp.fc.weight
+  models.12._orig_mod.transformer.h.3.mlp.proj.weight
+  models.12._orig_mod.transformer.h.3.normAtt.weight
+  models.12._orig_mod.transformer.h.3.normMlp.weight
+  models.12._orig_mod.normWte.weight
+  models.12._orig_mod.normWte.bias
+Optimizer #13/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.13._orig_mod.skipWeights
+  models.13._orig_mod.transformer.wte.weight
+  models.13._orig_mod.transformer.h.0.blockLambdas
+  models.13._orig_mod.transformer.h.0.attn.lambdas
+  models.13._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.13._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.13._orig_mod.transformer.h.0.attn.projQ.weight
+  models.13._orig_mod.transformer.h.0.attn.projK.weight
+  models.13._orig_mod.transformer.h.0.attn.projV.weight
+  models.13._orig_mod.transformer.h.0.attn.projOut.weight
+  models.13._orig_mod.transformer.h.0.mlp.fc.weight
+  models.13._orig_mod.transformer.h.0.mlp.proj.weight
+  models.13._orig_mod.transformer.h.0.normAtt.weight
+  models.13._orig_mod.transformer.h.0.normMlp.weight
+  models.13._orig_mod.transformer.h.1.blockLambdas
+  models.13._orig_mod.transformer.h.1.attn.lambdas
+  models.13._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.13._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.13._orig_mod.transformer.h.1.attn.projQ.weight
+  models.13._orig_mod.transformer.h.1.attn.projK.weight
+  models.13._orig_mod.transformer.h.1.attn.projV.weight
+  models.13._orig_mod.transformer.h.1.attn.projOut.weight
+  models.13._orig_mod.transformer.h.1.mlp.fc.weight
+  models.13._orig_mod.transformer.h.1.mlp.proj.weight
+  models.13._orig_mod.transformer.h.1.normAtt.weight
+  models.13._orig_mod.transformer.h.1.normMlp.weight
+  models.13._orig_mod.transformer.h.2.blockLambdas
+  models.13._orig_mod.transformer.h.2.attn.lambdas
+  models.13._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.13._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.13._orig_mod.transformer.h.2.attn.projQ.weight
+  models.13._orig_mod.transformer.h.2.attn.projK.weight
+  models.13._orig_mod.transformer.h.2.attn.projV.weight
+  models.13._orig_mod.transformer.h.2.attn.projOut.weight
+  models.13._orig_mod.transformer.h.2.mlp.fc.weight
+  models.13._orig_mod.transformer.h.2.mlp.proj.weight
+  models.13._orig_mod.transformer.h.2.normAtt.weight
+  models.13._orig_mod.transformer.h.2.normMlp.weight
+  models.13._orig_mod.transformer.h.3.blockLambdas
+  models.13._orig_mod.transformer.h.3.attn.lambdas
+  models.13._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.13._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.13._orig_mod.transformer.h.3.attn.projQ.weight
+  models.13._orig_mod.transformer.h.3.attn.projK.weight
+  models.13._orig_mod.transformer.h.3.attn.projV.weight
+  models.13._orig_mod.transformer.h.3.attn.projOut.weight
+  models.13._orig_mod.transformer.h.3.mlp.fc.weight
+  models.13._orig_mod.transformer.h.3.mlp.proj.weight
+  models.13._orig_mod.transformer.h.3.normAtt.weight
+  models.13._orig_mod.transformer.h.3.normMlp.weight
+  models.13._orig_mod.normWte.weight
+  models.13._orig_mod.normWte.bias
+Optimizer #14/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.14._orig_mod.skipWeights
+  models.14._orig_mod.transformer.wte.weight
+  models.14._orig_mod.transformer.h.0.blockLambdas
+  models.14._orig_mod.transformer.h.0.attn.lambdas
+  models.14._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.14._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.14._orig_mod.transformer.h.0.attn.projQ.weight
+  models.14._orig_mod.transformer.h.0.attn.projK.weight
+  models.14._orig_mod.transformer.h.0.attn.projV.weight
+  models.14._orig_mod.transformer.h.0.attn.projOut.weight
+  models.14._orig_mod.transformer.h.0.mlp.fc.weight
+  models.14._orig_mod.transformer.h.0.mlp.proj.weight
+  models.14._orig_mod.transformer.h.0.normAtt.weight
+  models.14._orig_mod.transformer.h.0.normMlp.weight
+  models.14._orig_mod.transformer.h.1.blockLambdas
+  models.14._orig_mod.transformer.h.1.attn.lambdas
+  models.14._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.14._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.14._orig_mod.transformer.h.1.attn.projQ.weight
+  models.14._orig_mod.transformer.h.1.attn.projK.weight
+  models.14._orig_mod.transformer.h.1.attn.projV.weight
+  models.14._orig_mod.transformer.h.1.attn.projOut.weight
+  models.14._orig_mod.transformer.h.1.mlp.fc.weight
+  models.14._orig_mod.transformer.h.1.mlp.proj.weight
+  models.14._orig_mod.transformer.h.1.normAtt.weight
+  models.14._orig_mod.transformer.h.1.normMlp.weight
+  models.14._orig_mod.transformer.h.2.blockLambdas
+  models.14._orig_mod.transformer.h.2.attn.lambdas
+  models.14._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.14._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.14._orig_mod.transformer.h.2.attn.projQ.weight
+  models.14._orig_mod.transformer.h.2.attn.projK.weight
+  models.14._orig_mod.transformer.h.2.attn.projV.weight
+  models.14._orig_mod.transformer.h.2.attn.projOut.weight
+  models.14._orig_mod.transformer.h.2.mlp.fc.weight
+  models.14._orig_mod.transformer.h.2.mlp.proj.weight
+  models.14._orig_mod.transformer.h.2.normAtt.weight
+  models.14._orig_mod.transformer.h.2.normMlp.weight
+  models.14._orig_mod.transformer.h.3.blockLambdas
+  models.14._orig_mod.transformer.h.3.attn.lambdas
+  models.14._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.14._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.14._orig_mod.transformer.h.3.attn.projQ.weight
+  models.14._orig_mod.transformer.h.3.attn.projK.weight
+  models.14._orig_mod.transformer.h.3.attn.projV.weight
+  models.14._orig_mod.transformer.h.3.attn.projOut.weight
+  models.14._orig_mod.transformer.h.3.mlp.fc.weight
+  models.14._orig_mod.transformer.h.3.mlp.proj.weight
+  models.14._orig_mod.transformer.h.3.normAtt.weight
+  models.14._orig_mod.transformer.h.3.normMlp.weight
+  models.14._orig_mod.normWte.weight
+  models.14._orig_mod.normWte.bias
+Optimizer #15/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.15._orig_mod.skipWeights
+  models.15._orig_mod.transformer.wte.weight
+  models.15._orig_mod.transformer.h.0.blockLambdas
+  models.15._orig_mod.transformer.h.0.attn.lambdas
+  models.15._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.15._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.15._orig_mod.transformer.h.0.attn.projQ.weight
+  models.15._orig_mod.transformer.h.0.attn.projK.weight
+  models.15._orig_mod.transformer.h.0.attn.projV.weight
+  models.15._orig_mod.transformer.h.0.attn.projOut.weight
+  models.15._orig_mod.transformer.h.0.mlp.fc.weight
+  models.15._orig_mod.transformer.h.0.mlp.proj.weight
+  models.15._orig_mod.transformer.h.0.normAtt.weight
+  models.15._orig_mod.transformer.h.0.normMlp.weight
+  models.15._orig_mod.transformer.h.1.blockLambdas
+  models.15._orig_mod.transformer.h.1.attn.lambdas
+  models.15._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.15._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.15._orig_mod.transformer.h.1.attn.projQ.weight
+  models.15._orig_mod.transformer.h.1.attn.projK.weight
+  models.15._orig_mod.transformer.h.1.attn.projV.weight
+  models.15._orig_mod.transformer.h.1.attn.projOut.weight
+  models.15._orig_mod.transformer.h.1.mlp.fc.weight
+  models.15._orig_mod.transformer.h.1.mlp.proj.weight
+  models.15._orig_mod.transformer.h.1.normAtt.weight
+  models.15._orig_mod.transformer.h.1.normMlp.weight
+  models.15._orig_mod.transformer.h.2.blockLambdas
+  models.15._orig_mod.transformer.h.2.attn.lambdas
+  models.15._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.15._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.15._orig_mod.transformer.h.2.attn.projQ.weight
+  models.15._orig_mod.transformer.h.2.attn.projK.weight
+  models.15._orig_mod.transformer.h.2.attn.projV.weight
+  models.15._orig_mod.transformer.h.2.attn.projOut.weight
+  models.15._orig_mod.transformer.h.2.mlp.fc.weight
+  models.15._orig_mod.transformer.h.2.mlp.proj.weight
+  models.15._orig_mod.transformer.h.2.normAtt.weight
+  models.15._orig_mod.transformer.h.2.normMlp.weight
+  models.15._orig_mod.transformer.h.3.blockLambdas
+  models.15._orig_mod.transformer.h.3.attn.lambdas
+  models.15._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.15._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.15._orig_mod.transformer.h.3.attn.projQ.weight
+  models.15._orig_mod.transformer.h.3.attn.projK.weight
+  models.15._orig_mod.transformer.h.3.attn.projV.weight
+  models.15._orig_mod.transformer.h.3.attn.projOut.weight
+  models.15._orig_mod.transformer.h.3.mlp.fc.weight
+  models.15._orig_mod.transformer.h.3.mlp.proj.weight
+  models.15._orig_mod.transformer.h.3.normAtt.weight
+  models.15._orig_mod.transformer.h.3.normMlp.weight
+  models.15._orig_mod.normWte.weight
+  models.15._orig_mod.normWte.bias
+Optimizer #16/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.16._orig_mod.skipWeights
+  models.16._orig_mod.transformer.wte.weight
+  models.16._orig_mod.transformer.h.0.blockLambdas
+  models.16._orig_mod.transformer.h.0.attn.lambdas
+  models.16._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.16._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.16._orig_mod.transformer.h.0.attn.projQ.weight
+  models.16._orig_mod.transformer.h.0.attn.projK.weight
+  models.16._orig_mod.transformer.h.0.attn.projV.weight
+  models.16._orig_mod.transformer.h.0.attn.projOut.weight
+  models.16._orig_mod.transformer.h.0.mlp.fc.weight
+  models.16._orig_mod.transformer.h.0.mlp.proj.weight
+  models.16._orig_mod.transformer.h.0.normAtt.weight
+  models.16._orig_mod.transformer.h.0.normMlp.weight
+  models.16._orig_mod.transformer.h.1.blockLambdas
+  models.16._orig_mod.transformer.h.1.attn.lambdas
+  models.16._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.16._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.16._orig_mod.transformer.h.1.attn.projQ.weight
+  models.16._orig_mod.transformer.h.1.attn.projK.weight
+  models.16._orig_mod.transformer.h.1.attn.projV.weight
+  models.16._orig_mod.transformer.h.1.attn.projOut.weight
+  models.16._orig_mod.transformer.h.1.mlp.fc.weight
+  models.16._orig_mod.transformer.h.1.mlp.proj.weight
+  models.16._orig_mod.transformer.h.1.normAtt.weight
+  models.16._orig_mod.transformer.h.1.normMlp.weight
+  models.16._orig_mod.transformer.h.2.blockLambdas
+  models.16._orig_mod.transformer.h.2.attn.lambdas
+  models.16._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.16._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.16._orig_mod.transformer.h.2.attn.projQ.weight
+  models.16._orig_mod.transformer.h.2.attn.projK.weight
+  models.16._orig_mod.transformer.h.2.attn.projV.weight
+  models.16._orig_mod.transformer.h.2.attn.projOut.weight
+  models.16._orig_mod.transformer.h.2.mlp.fc.weight
+  models.16._orig_mod.transformer.h.2.mlp.proj.weight
+  models.16._orig_mod.transformer.h.2.normAtt.weight
+  models.16._orig_mod.transformer.h.2.normMlp.weight
+  models.16._orig_mod.transformer.h.3.blockLambdas
+  models.16._orig_mod.transformer.h.3.attn.lambdas
+  models.16._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.16._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.16._orig_mod.transformer.h.3.attn.projQ.weight
+  models.16._orig_mod.transformer.h.3.attn.projK.weight
+  models.16._orig_mod.transformer.h.3.attn.projV.weight
+  models.16._orig_mod.transformer.h.3.attn.projOut.weight
+  models.16._orig_mod.transformer.h.3.mlp.fc.weight
+  models.16._orig_mod.transformer.h.3.mlp.proj.weight
+  models.16._orig_mod.transformer.h.3.normAtt.weight
+  models.16._orig_mod.transformer.h.3.normMlp.weight
+  models.16._orig_mod.normWte.weight
+  models.16._orig_mod.normWte.bias
+Optimizer #17/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.17._orig_mod.skipWeights
+  models.17._orig_mod.transformer.wte.weight
+  models.17._orig_mod.transformer.h.0.blockLambdas
+  models.17._orig_mod.transformer.h.0.attn.lambdas
+  models.17._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.17._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.17._orig_mod.transformer.h.0.attn.projQ.weight
+  models.17._orig_mod.transformer.h.0.attn.projK.weight
+  models.17._orig_mod.transformer.h.0.attn.projV.weight
+  models.17._orig_mod.transformer.h.0.attn.projOut.weight
+  models.17._orig_mod.transformer.h.0.mlp.fc.weight
+  models.17._orig_mod.transformer.h.0.mlp.proj.weight
+  models.17._orig_mod.transformer.h.0.normAtt.weight
+  models.17._orig_mod.transformer.h.0.normMlp.weight
+  models.17._orig_mod.transformer.h.1.blockLambdas
+  models.17._orig_mod.transformer.h.1.attn.lambdas
+  models.17._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.17._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.17._orig_mod.transformer.h.1.attn.projQ.weight
+  models.17._orig_mod.transformer.h.1.attn.projK.weight
+  models.17._orig_mod.transformer.h.1.attn.projV.weight
+  models.17._orig_mod.transformer.h.1.attn.projOut.weight
+  models.17._orig_mod.transformer.h.1.mlp.fc.weight
+  models.17._orig_mod.transformer.h.1.mlp.proj.weight
+  models.17._orig_mod.transformer.h.1.normAtt.weight
+  models.17._orig_mod.transformer.h.1.normMlp.weight
+  models.17._orig_mod.transformer.h.2.blockLambdas
+  models.17._orig_mod.transformer.h.2.attn.lambdas
+  models.17._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.17._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.17._orig_mod.transformer.h.2.attn.projQ.weight
+  models.17._orig_mod.transformer.h.2.attn.projK.weight
+  models.17._orig_mod.transformer.h.2.attn.projV.weight
+  models.17._orig_mod.transformer.h.2.attn.projOut.weight
+  models.17._orig_mod.transformer.h.2.mlp.fc.weight
+  models.17._orig_mod.transformer.h.2.mlp.proj.weight
+  models.17._orig_mod.transformer.h.2.normAtt.weight
+  models.17._orig_mod.transformer.h.2.normMlp.weight
+  models.17._orig_mod.transformer.h.3.blockLambdas
+  models.17._orig_mod.transformer.h.3.attn.lambdas
+  models.17._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.17._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.17._orig_mod.transformer.h.3.attn.projQ.weight
+  models.17._orig_mod.transformer.h.3.attn.projK.weight
+  models.17._orig_mod.transformer.h.3.attn.projV.weight
+  models.17._orig_mod.transformer.h.3.attn.projOut.weight
+  models.17._orig_mod.transformer.h.3.mlp.fc.weight
+  models.17._orig_mod.transformer.h.3.mlp.proj.weight
+  models.17._orig_mod.transformer.h.3.normAtt.weight
+  models.17._orig_mod.transformer.h.3.normMlp.weight
+  models.17._orig_mod.normWte.weight
+  models.17._orig_mod.normWte.bias
+Optimizer #18/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.18._orig_mod.skipWeights
+  models.18._orig_mod.transformer.wte.weight
+  models.18._orig_mod.transformer.h.0.blockLambdas
+  models.18._orig_mod.transformer.h.0.attn.lambdas
+  models.18._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.18._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.18._orig_mod.transformer.h.0.attn.projQ.weight
+  models.18._orig_mod.transformer.h.0.attn.projK.weight
+  models.18._orig_mod.transformer.h.0.attn.projV.weight
+  models.18._orig_mod.transformer.h.0.attn.projOut.weight
+  models.18._orig_mod.transformer.h.0.mlp.fc.weight
+  models.18._orig_mod.transformer.h.0.mlp.proj.weight
+  models.18._orig_mod.transformer.h.0.normAtt.weight
+  models.18._orig_mod.transformer.h.0.normMlp.weight
+  models.18._orig_mod.transformer.h.1.blockLambdas
+  models.18._orig_mod.transformer.h.1.attn.lambdas
+  models.18._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.18._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.18._orig_mod.transformer.h.1.attn.projQ.weight
+  models.18._orig_mod.transformer.h.1.attn.projK.weight
+  models.18._orig_mod.transformer.h.1.attn.projV.weight
+  models.18._orig_mod.transformer.h.1.attn.projOut.weight
+  models.18._orig_mod.transformer.h.1.mlp.fc.weight
+  models.18._orig_mod.transformer.h.1.mlp.proj.weight
+  models.18._orig_mod.transformer.h.1.normAtt.weight
+  models.18._orig_mod.transformer.h.1.normMlp.weight
+  models.18._orig_mod.transformer.h.2.blockLambdas
+  models.18._orig_mod.transformer.h.2.attn.lambdas
+  models.18._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.18._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.18._orig_mod.transformer.h.2.attn.projQ.weight
+  models.18._orig_mod.transformer.h.2.attn.projK.weight
+  models.18._orig_mod.transformer.h.2.attn.projV.weight
+  models.18._orig_mod.transformer.h.2.attn.projOut.weight
+  models.18._orig_mod.transformer.h.2.mlp.fc.weight
+  models.18._orig_mod.transformer.h.2.mlp.proj.weight
+  models.18._orig_mod.transformer.h.2.normAtt.weight
+  models.18._orig_mod.transformer.h.2.normMlp.weight
+  models.18._orig_mod.transformer.h.3.blockLambdas
+  models.18._orig_mod.transformer.h.3.attn.lambdas
+  models.18._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.18._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.18._orig_mod.transformer.h.3.attn.projQ.weight
+  models.18._orig_mod.transformer.h.3.attn.projK.weight
+  models.18._orig_mod.transformer.h.3.attn.projV.weight
+  models.18._orig_mod.transformer.h.3.attn.projOut.weight
+  models.18._orig_mod.transformer.h.3.mlp.fc.weight
+  models.18._orig_mod.transformer.h.3.mlp.proj.weight
+  models.18._orig_mod.transformer.h.3.normAtt.weight
+  models.18._orig_mod.transformer.h.3.normMlp.weight
+  models.18._orig_mod.normWte.weight
+  models.18._orig_mod.normWte.bias
+Optimizer #19/20: Adam
+  Param group 0: lr=0.0006, weight_decay=0.0
+  models.19._orig_mod.skipWeights
+  models.19._orig_mod.transformer.wte.weight
+  models.19._orig_mod.transformer.h.0.blockLambdas
+  models.19._orig_mod.transformer.h.0.attn.lambdas
+  models.19._orig_mod.transformer.h.0.attn.projAtt.weight
+  models.19._orig_mod.transformer.h.0.attn.projAtt.bias
+  models.19._orig_mod.transformer.h.0.attn.projQ.weight
+  models.19._orig_mod.transformer.h.0.attn.projK.weight
+  models.19._orig_mod.transformer.h.0.attn.projV.weight
+  models.19._orig_mod.transformer.h.0.attn.projOut.weight
+  models.19._orig_mod.transformer.h.0.mlp.fc.weight
+  models.19._orig_mod.transformer.h.0.mlp.proj.weight
+  models.19._orig_mod.transformer.h.0.normAtt.weight
+  models.19._orig_mod.transformer.h.0.normMlp.weight
+  models.19._orig_mod.transformer.h.1.blockLambdas
+  models.19._orig_mod.transformer.h.1.attn.lambdas
+  models.19._orig_mod.transformer.h.1.attn.projAtt.weight
+  models.19._orig_mod.transformer.h.1.attn.projAtt.bias
+  models.19._orig_mod.transformer.h.1.attn.projQ.weight
+  models.19._orig_mod.transformer.h.1.attn.projK.weight
+  models.19._orig_mod.transformer.h.1.attn.projV.weight
+  models.19._orig_mod.transformer.h.1.attn.projOut.weight
+  models.19._orig_mod.transformer.h.1.mlp.fc.weight
+  models.19._orig_mod.transformer.h.1.mlp.proj.weight
+  models.19._orig_mod.transformer.h.1.normAtt.weight
+  models.19._orig_mod.transformer.h.1.normMlp.weight
+  models.19._orig_mod.transformer.h.2.blockLambdas
+  models.19._orig_mod.transformer.h.2.attn.lambdas
+  models.19._orig_mod.transformer.h.2.attn.projAtt.weight
+  models.19._orig_mod.transformer.h.2.attn.projAtt.bias
+  models.19._orig_mod.transformer.h.2.attn.projQ.weight
+  models.19._orig_mod.transformer.h.2.attn.projK.weight
+  models.19._orig_mod.transformer.h.2.attn.projV.weight
+  models.19._orig_mod.transformer.h.2.attn.projOut.weight
+  models.19._orig_mod.transformer.h.2.mlp.fc.weight
+  models.19._orig_mod.transformer.h.2.mlp.proj.weight
+  models.19._orig_mod.transformer.h.2.normAtt.weight
+  models.19._orig_mod.transformer.h.2.normMlp.weight
+  models.19._orig_mod.transformer.h.3.blockLambdas
+  models.19._orig_mod.transformer.h.3.attn.lambdas
+  models.19._orig_mod.transformer.h.3.attn.projAtt.weight
+  models.19._orig_mod.transformer.h.3.attn.projAtt.bias
+  models.19._orig_mod.transformer.h.3.attn.projQ.weight
+  models.19._orig_mod.transformer.h.3.attn.projK.weight
+  models.19._orig_mod.transformer.h.3.attn.projV.weight
+  models.19._orig_mod.transformer.h.3.attn.projOut.weight
+  models.19._orig_mod.transformer.h.3.mlp.fc.weight
+  models.19._orig_mod.transformer.h.3.mlp.proj.weight
+  models.19._orig_mod.transformer.h.3.normAtt.weight
+  models.19._orig_mod.transformer.h.3.normMlp.weight
+  models.19._orig_mod.normWte.weight
+  models.19._orig_mod.normWte.bias
+Optimizer #20/20: Adam
+  Param group 0: lr=0.1, weight_decay=0
+  models.0._orig_mod.transformer.h.0.mlp.af.afVals
+  models.0._orig_mod.transformer.h.1.mlp.af.afVals
+  models.0._orig_mod.transformer.h.2.mlp.af.afVals
+  models.0._orig_mod.transformer.h.3.mlp.af.afVals
+====================================================================================================
+Step 1/20000   lossVa 15.1172   accVa 0.0
+Step 1/20000   lossTr 15.1347   accTr 0.0   17s = 17.07s/step
+Step 1/20000   Activation magnitudes (2): 0.80 0.26 0.80 0.26 0.80 0.25 0.80 0.26
+Step 1/20000   Activation magnitudes (3): 4.56 1.66 4.56 1.56 4.56 1.62 4.56 1.75
+Step 6/20000   Peak CUDA memory usage: 2.761 GB
+Step 6/20000   lossTr 15.1100   accTr 0.0   28s = 2.15s/step
+Step 6/20000   Activation magnitudes (2): 0.80 0.25 0.80 0.26 0.80 0.25 0.80 0.26
+Step 6/20000   Activation magnitudes (3): 4.70 1.62 4.70 1.63 4.70 1.55 4.70 1.62
+Step 11/20000   Peak CUDA memory usage: 2.719 GB
+Step 201/20000   lossTr 12.9990   accTr 0.8   40s = 0.06s/step
+Step 201/20000   Activation magnitudes (2): 0.80 0.29 0.81 0.24 0.82 0.19 0.84 0.22
+Step 201/20000   Activation magnitudes (3): 4.78 1.57 4.63 1.57 4.78 1.53 4.24 1.78
+Step 401/20000   lossTr 7.4484   accTr 9.3   55s = 0.08s/step
+Step 401/20000   Activation magnitudes (2): 0.80 0.30 0.81 0.26 0.81 0.27 0.81 0.25
+Step 401/20000   Activation magnitudes (3): 4.70 1.80 4.94 1.76 4.70 1.73 4.99 1.79
+Step 501/20000   lossVa 6.8970   accVa 12.5
+Step 601/20000   lossTr 6.9487   accTr 12.1   69s = 0.07s/step
+Step 601/20000   Activation magnitudes (2): 0.81 0.30 0.81 0.27 0.82 0.27 0.83 0.26
+Step 601/20000   Activation magnitudes (3): 4.73 1.82 4.76 1.67 4.36 1.83 4.18 1.88
+Step 801/20000   lossTr 6.7073   accTr 13.4   91s = 0.11s/step
+Step 801/20000   Activation magnitudes (2): 0.82 0.30 0.82 0.27 0.83 0.27 0.83 0.29
+Step 801/20000   Activation magnitudes (3): 4.62 1.73 4.87 1.74 4.50 1.92 4.52 2.03
+Step 1001/20000   lossVa 6.5884   accVa 14.3
+Step 1001/20000   lossTr 6.5515   accTr 14.3   105s = 0.07s/step
+Step 1001/20000   Activation magnitudes (2): 0.84 0.31 0.83 0.28 0.83 0.30 0.83 0.31
+Step 1001/20000   Activation magnitudes (3): 4.79 1.93 5.21 1.91 5.03 2.14 5.02 2.06
+Step 1201/20000   lossTr 6.5215   accTr 14.5   137s = 0.16s/step
+Step 1201/20000   Activation magnitudes (2): 0.86 0.32 0.83 0.30 0.85 0.33 0.83 0.33
+Step 1201/20000   Activation magnitudes (3): 4.81 2.11 4.82 2.24 5.11 2.54 5.55 2.23
+Step 1401/20000   lossTr 6.4066   accTr 14.9   172s = 0.18s/step
+Step 1401/20000   Activation magnitudes (2): 0.88 0.34 0.84 0.32 0.86 0.35 0.82 0.37
+Step 1401/20000   Activation magnitudes (3): 5.07 2.56 4.95 2.35 6.34 2.71 7.15 2.66
+Step 1501/20000   lossVa 6.3741   accVa 15.6
+Step 1601/20000   lossTr 6.4148   accTr 15.3   209s = 0.18s/step
+Step 1601/20000   Activation magnitudes (2): 0.89 0.36 0.84 0.35 0.87 0.36 0.81 0.38
+Step 1601/20000   Activation magnitudes (3): 5.02 2.37 5.32 2.51 6.48 2.80 7.65 2.58
+Step 1801/20000   lossTr 6.3051   accTr 15.8   243s = 0.17s/step
+Step 1801/20000   Activation magnitudes (2): 0.90 0.38 0.83 0.37 0.87 0.38 0.80 0.40
+Step 1801/20000   Activation magnitudes (3): 5.13 2.36 6.74 2.70 7.49 2.68 8.82 2.89
+Step 2001/20000   lossVa 6.2180   accVa 16.2
+Step 2001/20000   lossTr 6.2569   accTr 16.1   283s = 0.20s/step
+Step 2001/20000   Activation magnitudes (2): 0.91 0.39 0.82 0.40 0.87 0.42 0.80 0.42
+Step 2001/20000   Activation magnitudes (3): 4.96 2.46 6.93 2.93 8.85 2.88 10.00 3.25
+Step 2201/20000   lossTr 6.1858   accTr 16.3   343s = 0.30s/step
+Step 2201/20000   Activation magnitudes (2): 0.92 0.43 0.83 0.47 0.89 0.48 0.82 0.50
+Step 2201/20000   Activation magnitudes (3): 5.44 2.63 6.52 3.28 9.42 3.24 10.83 3.73
+Step 2401/20000   lossTr 6.1595   accTr 16.7   395s = 0.26s/step
+Step 2401/20000   Activation magnitudes (2): 0.93 0.45 0.83 0.50 0.90 0.49 0.78 0.47
+Step 2401/20000   Activation magnitudes (3): 5.94 2.86 8.22 3.48 11.11 3.05 12.57 3.49
+Step 2501/20000   lossVa 6.1127   accVa 17.1
+Step 2601/20000   lossTr 6.1094   accTr 16.8   451s = 0.28s/step
+Step 2601/20000   Activation magnitudes (2): 0.94 0.45 0.83 0.52 0.91 0.53 0.78 0.48
+Step 2601/20000   Activation magnitudes (3): 6.32 2.86 9.11 3.45 11.43 3.28 13.44 3.69
+Step 2801/20000   lossTr 5.9968   accTr 17.5   498s = 0.24s/step
+Step 2801/20000   Activation magnitudes (2): 0.94 0.46 0.81 0.53 0.89 0.54 0.77 0.46
+Step 2801/20000   Activation magnitudes (3): 6.69 2.98 9.47 3.53 11.48 3.57 13.86 4.25
+Step 3001/20000   lossVa 5.9480   accVa 17.9
+Step 3001/20000   lossTr 5.9481   accTr 18.0   556s = 0.29s/step
+Step 3001/20000   Activation magnitudes (2): 0.94 0.45 0.80 0.53 0.89 0.55 0.77 0.49
+Step 3001/20000   Activation magnitudes (3): 7.02 3.05 8.85 3.80 11.39 3.72 13.84 4.74
+Step 3201/20000   lossTr 6.0020   accTr 17.6   637s = 0.41s/step
+Step 3201/20000   Activation magnitudes (2): 0.95 0.48 0.82 0.59 0.92 0.61 0.78 0.48
+Step 3201/20000   Activation magnitudes (3): 7.36 3.15 9.01 4.13 10.89 3.74 14.24 4.44
+Step 3401/20000   lossTr 5.8953   accTr 18.1   730s = 0.46s/step
+Step 3401/20000   Activation magnitudes (2): 0.98 0.48 0.84 0.60 0.93 0.64 0.77 0.49
+Step 3401/20000   Activation magnitudes (3): 7.50 3.47 8.90 3.99 11.52 3.81 14.20 4.84
+Step 3501/20000   lossVa 5.8987   accVa 18.2
+Step 3601/20000   lossTr 5.9424   accTr 17.9   815s = 0.43s/step
+Step 3601/20000   Activation magnitudes (2): 0.98 0.48 0.84 0.61 0.93 0.64 0.78 0.49
+Step 3601/20000   Activation magnitudes (3): 7.63 3.32 8.19 4.21 11.68 4.19 14.84 4.93
+Step 3801/20000   lossTr 5.8134   accTr 18.6   893s = 0.39s/step
+Step 3801/20000   Activation magnitudes (2): 0.99 0.48 0.82 0.60 0.93 0.66 0.79 0.50
+Step 3801/20000   Activation magnitudes (3): 7.53 3.21 8.76 4.49 11.54 4.31 16.07 4.98
+Step 4001/20000   lossVa 5.8076   accVa 18.7
+Step 4001/20000   lossTr 5.8119   accTr 18.8   964s = 0.36s/step
+Step 4001/20000   Activation magnitudes (2): 0.99 0.47 0.82 0.61 0.93 0.66 0.80 0.50
+Step 4001/20000   Activation magnitudes (3): 7.59 3.52 8.34 5.32 11.39 4.37 15.99 4.85
+Step 4201/20000   lossTr 5.8392   accTr 18.5   1060s = 0.48s/step
+Step 4201/20000   Activation magnitudes (2): 1.03 0.50 0.83 0.67 0.96 0.72 0.82 0.52
+Step 4201/20000   Activation magnitudes (3): 7.95 3.65 9.24 4.98 12.67 4.79 16.59 5.22
+Step 4401/20000   lossTr 5.7889   accTr 19.0   1152s = 0.46s/step
+Step 4401/20000   Activation magnitudes (2): 1.06 0.50 0.85 0.71 0.97 0.75 0.84 0.54
+Step 4401/20000   Activation magnitudes (3): 8.32 3.53 9.45 5.31 12.54 4.80 16.56 5.22
+Step 4501/20000   lossVa 5.7607   accVa 19.2
+Step 4601/20000   lossTr 5.7066   accTr 19.4   1242s = 0.45s/step
+Step 4601/20000   Activation magnitudes (2): 1.08 0.50 0.85 0.68 0.97 0.73 0.85 0.52
+Step 4601/20000   Activation magnitudes (3): 8.76 3.26 9.33 5.15 12.91 4.80 17.16 5.62
+Step 4801/20000   lossTr 5.7380   accTr 19.3   1339s = 0.48s/step
+Step 4801/20000   Activation magnitudes (2): 1.12 0.50 0.84 0.67 0.97 0.74 0.87 0.55
+Step 4801/20000   Activation magnitudes (3): 9.03 3.88 9.35 5.33 12.32 5.19 16.76 5.98
+Step 5001/20000   lossVa 5.6716   accVa 19.9
+Step 5001/20000   lossTr 5.7221   accTr 19.5   1423s = 0.42s/step
+Step 5001/20000   Activation magnitudes (2): 1.12 0.49 0.84 0.67 0.98 0.75 0.89 0.54
+Step 5001/20000   Activation magnitudes (3): 9.36 3.26 9.33 5.69 11.98 5.17 17.30 6.23
+Step 5201/20000   lossTr 5.6652   accTr 20.1   1539s = 0.58s/step
+Step 5201/20000   Activation magnitudes (2): 1.19 0.52 0.86 0.75 1.00 0.82 0.92 0.55
+Step 5201/20000   Activation magnitudes (3): 9.83 3.78 9.52 5.70 13.11 5.27 18.37 5.72
+Step 5401/20000   lossTr 5.6257   accTr 20.0   1650s = 0.55s/step
+Step 5401/20000   Activation magnitudes (2): 1.24 0.52 0.88 0.76 1.02 0.82 0.95 0.57
+Step 5401/20000   Activation magnitudes (3): 10.27 3.60 9.78 5.62 13.64 5.50 19.16 5.67
+Step 5501/20000   lossVa 5.6147   accVa 20.5
+Step 5601/20000   lossTr 5.6557   accTr 20.2   1759s = 0.55s/step
+Step 5601/20000   Activation magnitudes (2): 1.28 0.52 0.88 0.75 1.02 0.82 0.99 0.59
+Step 5601/20000   Activation magnitudes (3): 10.63 3.51 9.54 5.52 13.08 5.54 19.05 6.29
+Step 5801/20000   lossTr 5.5863   accTr 20.6   1871s = 0.56s/step
+Step 5801/20000   Activation magnitudes (2): 1.31 0.51 0.88 0.72 1.03 0.81 1.01 0.58
+Step 5801/20000   Activation magnitudes (3): 10.92 3.73 9.87 5.65 12.89 5.93 19.18 6.29
+Step 6001/20000   lossVa 5.5368   accVa 21.1
+Step 6001/20000   lossTr 5.5519   accTr 21.1   1985s = 0.57s/step
+Step 6001/20000   Activation magnitudes (2): 1.34 0.52 0.87 0.72 1.02 0.82 1.04 0.57
+Step 6001/20000   Activation magnitudes (3): 11.14 3.82 10.14 6.14 13.60 6.15 19.93 6.73
+Step 6201/20000   lossTr 5.5278   accTr 21.0   2101s = 0.58s/step
+Step 6201/20000   Activation magnitudes (2): 1.40 0.54 0.89 0.82 1.05 0.88 1.07 0.56
+Step 6201/20000   Activation magnitudes (3): 11.34 3.90 11.83 6.52 14.94 6.53 20.70 6.62
+Step 6401/20000   lossTr 5.5097   accTr 21.2   2225s = 0.62s/step
+Step 6401/20000   Activation magnitudes (2): 1.43 0.53 0.91 0.81 1.06 0.87 1.10 0.56
+Step 6401/20000   Activation magnitudes (3): 11.75 3.98 12.09 6.24 15.83 6.24 19.73 6.69
+Step 6501/20000   lossVa 5.5000   accVa 21.5
+Step 6601/20000   lossTr 5.4845   accTr 21.5   2339s = 0.57s/step
+Step 6601/20000   Activation magnitudes (2): 1.50 0.55 0.91 0.82 1.06 0.88 1.13 0.61
+Step 6601/20000   Activation magnitudes (3): 11.90 4.18 12.47 6.17 15.97 6.80 21.08 7.02
+Step 6801/20000   lossTr 5.4601   accTr 21.7   2475s = 0.68s/step
+Step 6801/20000   Activation magnitudes (2): 1.54 0.54 0.91 0.79 1.06 0.89 1.15 0.62
+Step 6801/20000   Activation magnitudes (3): 12.02 4.12 12.00 6.42 15.53 6.52 21.95 7.57
+Step 7001/20000   lossVa 5.4764   accVa 22.0
+Step 7001/20000   lossTr 5.4307   accTr 22.1   2601s = 0.63s/step
+Step 7001/20000   Activation magnitudes (2): 1.55 0.55 0.90 0.79 1.06 0.90 1.18 0.62
+Step 7001/20000   Activation magnitudes (3): 12.02 4.32 10.95 6.37 15.37 6.71 20.99 7.54
+Step 7201/20000   lossTr 5.4614   accTr 21.8   2765s = 0.82s/step
+Step 7201/20000   Activation magnitudes (2): 1.60 0.56 0.93 0.90 1.08 0.93 1.19 0.59
+Step 7201/20000   Activation magnitudes (3): 12.17 4.25 11.08 6.78 15.29 6.71 21.83 6.81
+Step 7401/20000   lossTr 5.4646   accTr 21.9   2910s = 0.73s/step
+Step 7401/20000   Activation magnitudes (2): 1.62 0.57 0.94 0.90 1.08 0.93 1.22 0.61
+Step 7401/20000   Activation magnitudes (3): 12.26 4.66 10.99 6.45 14.71 7.10 22.01 7.73
+Step 7501/20000   lossVa 5.4204   accVa 22.3
+Step 7601/20000   lossTr 5.4041   accTr 22.3   3055s = 0.73s/step
+Step 7601/20000   Activation magnitudes (2): 1.67 0.57 0.94 0.87 1.08 0.92 1.25 0.62
+Step 7601/20000   Activation magnitudes (3): 12.22 4.88 10.33 6.94 13.95 7.04 22.19 8.11
+Step 7801/20000   lossTr 5.4281   accTr 22.1   3206s = 0.75s/step
+Step 7801/20000   Activation magnitudes (2): 1.70 0.57 0.94 0.85 1.08 0.93 1.27 0.63
+Step 7801/20000   Activation magnitudes (3): 12.15 4.15 9.69 6.95 13.50 7.19 23.40 7.60
+Step 8001/20000   lossVa 5.3934   accVa 22.5
+Step 8001/20000   lossTr 5.3706   accTr 22.5   3350s = 0.72s/step
+Step 8001/20000   Activation magnitudes (2): 1.70 0.58 0.94 0.87 1.08 0.95 1.30 0.63
+Step 8001/20000   Activation magnitudes (3): 12.09 4.88 9.57 7.03 12.88 8.15 23.09 8.43
+Step 8201/20000   lossTr 5.3891   accTr 22.5   3517s = 0.83s/step
+Step 8201/20000   Activation magnitudes (2): 1.75 0.59 0.96 0.97 1.09 0.99 1.30 0.62
+Step 8201/20000   Activation magnitudes (3): 12.02 4.34 9.49 7.01 13.44 7.62 23.69 7.68
+Step 8401/20000   lossTr 5.3596   accTr 22.8   3691s = 0.87s/step
+Step 8401/20000   Activation magnitudes (2): 1.78 0.59 0.98 0.97 1.09 0.98 1.34 0.64
+Step 8401/20000   Activation magnitudes (3): 12.03 4.38 9.36 7.28 13.28 7.58 23.93 8.01
+Step 8501/20000   lossVa 5.3430   accVa 22.9
+Step 8601/20000   lossTr 5.4092   accTr 22.6   3864s = 0.86s/step
+Step 8601/20000   Activation magnitudes (2): 1.81 0.60 0.98 0.98 1.09 1.00 1.36 0.66
+Step 8601/20000   Activation magnitudes (3): 11.82 4.56 9.46 7.31 12.67 8.13 22.85 7.84
+Step 8801/20000   lossTr 5.3324   accTr 22.6   4026s = 0.81s/step
+Step 8801/20000   Activation magnitudes (2): 1.81 0.60 0.98 0.90 1.09 1.00 1.38 0.66
+Step 8801/20000   Activation magnitudes (3): 11.49 4.38 9.40 7.22 12.90 8.25 24.00 8.98
+Step 9001/20000   lossVa 5.3157   accVa 23.1
+Step 9001/20000   lossTr 5.3139   accTr 22.9   4182s = 0.78s/step
+Step 9001/20000   Activation magnitudes (2): 1.81 0.61 0.97 0.92 1.08 1.02 1.40 0.65
+Step 9001/20000   Activation magnitudes (3): 11.73 4.47 9.16 7.76 12.47 8.23 23.93 9.29
+Step 9201/20000   lossTr 5.3422   accTr 22.8   4363s = 0.91s/step
+Step 9201/20000   Activation magnitudes (2): 1.84 0.62 1.00 1.03 1.08 1.06 1.40 0.66
+Step 9201/20000   Activation magnitudes (3): 12.23 4.74 9.92 7.51 13.49 7.98 24.28 9.03
+Step 9401/20000   lossTr 5.3108   accTr 23.2   4546s = 0.92s/step
+Step 9401/20000   Activation magnitudes (2): 1.86 0.63 1.02 1.07 1.10 1.04 1.44 0.68
+Step 9401/20000   Activation magnitudes (3): 12.92 4.92 9.77 7.44 13.17 7.80 23.81 8.65
+Step 9501/20000   lossVa 5.3110   accVa 23.3
+Step 9601/20000   lossTr 5.2858   accTr 23.1   4702s = 0.78s/step
+Step 9601/20000   Activation magnitudes (2): 1.87 0.64 1.01 1.04 1.09 1.06 1.46 0.68
+Step 9601/20000   Activation magnitudes (3): 13.30 5.03 9.92 7.54 12.99 8.54 25.07 9.03
+Step 9801/20000   lossTr 5.3314   accTr 23.2   4876s = 0.87s/step
+Step 9801/20000   Activation magnitudes (2): 1.90 0.64 1.02 1.00 1.09 1.07 1.47 0.69
+Step 9801/20000   Activation magnitudes (3): 13.63 5.82 10.01 8.66 13.10 8.13 24.77 9.91
+Step 10001/20000   lossVa 5.2731   accVa 23.5
+Step 10001/20000   lossTr 5.3280   accTr 23.2   5050s = 0.87s/step
+Step 10001/20000   Activation magnitudes (2): 1.87 0.64 1.01 0.97 1.09 1.06 1.48 0.69
+Step 10001/20000   Activation magnitudes (3): 13.61 4.82 9.90 8.14 12.99 8.60 24.92 9.46
+Step 10201/20000   lossTr 5.2650   accTr 23.4   5250s = 1.00s/step
+Step 10201/20000   Activation magnitudes (2): 1.91 0.65 1.04 1.13 1.10 1.09 1.50 0.68
+Step 10201/20000   Activation magnitudes (3): 13.49 4.94 10.19 8.14 13.59 8.87 25.13 9.22
+Step 10401/20000   lossTr 5.2695   accTr 23.3   5456s = 1.03s/step
+Step 10401/20000   Activation magnitudes (2): 1.91 0.65 1.05 1.16 1.09 1.09 1.49 0.68
+Step 10401/20000   Activation magnitudes (3): 13.08 4.72 10.74 7.86 13.43 8.69 25.49 9.90
+Step 10501/20000   lossVa 5.2751   accVa 23.6
+Step 10601/20000   lossTr 5.2894   accTr 23.4   5664s = 1.04s/step
+Step 10601/20000   Activation magnitudes (2): 1.93 0.66 1.05 1.06 1.10 1.10 1.53 0.71
+Step 10601/20000   Activation magnitudes (3): 12.67 5.02 10.78 8.80 13.58 9.12 25.29 9.82
+Step 10801/20000   lossTr 5.2567   accTr 23.7   5856s = 0.96s/step
+Step 10801/20000   Activation magnitudes (2): 1.94 0.67 1.05 1.03 1.09 1.11 1.54 0.72
+Step 10801/20000   Activation magnitudes (3): 12.46 4.81 10.69 7.80 13.01 8.59 25.35 10.06
+Step 11001/20000   lossVa 5.2430   accVa 23.8
+Step 11001/20000   lossTr 5.2738   accTr 23.6   6058s = 1.01s/step
+Step 11001/20000   Activation magnitudes (2): 1.95 0.66 1.05 1.02 1.10 1.09 1.57 0.73
+Step 11001/20000   Activation magnitudes (3): 12.67 5.75 10.53 7.99 12.96 9.16 25.01 9.73
+Step 11201/20000   lossTr 5.2309   accTr 23.8   6265s = 1.03s/step
+Step 11201/20000   Activation magnitudes (2): 1.98 0.68 1.07 1.13 1.09 1.12 1.56 0.72
+Step 11201/20000   Activation magnitudes (3): 12.84 5.52 10.60 8.60 13.22 9.13 25.09 8.55
+Step 11401/20000   lossTr 5.2443   accTr 23.6   6472s = 1.04s/step
+Step 11401/20000   Activation magnitudes (2): 2.01 0.68 1.08 1.19 1.10 1.15 1.59 0.74
+Step 11401/20000   Activation magnitudes (3): 12.09 5.30 11.17 8.62 13.08 9.32 25.32 9.34
+Step 11501/20000   lossVa 5.2607   accVa 23.7
+Step 11601/20000   lossTr 5.2359   accTr 23.8   6701s = 1.14s/step
+Step 11601/20000   Activation magnitudes (2): 2.04 0.69 1.09 1.18 1.10 1.15 1.59 0.75
+Step 11601/20000   Activation magnitudes (3): 12.30 4.97 11.34 8.43 12.98 9.43 25.33 10.85
+Step 11801/20000   lossTr 5.2169   accTr 23.7   6940s = 1.20s/step
+Step 11801/20000   Activation magnitudes (2): 2.04 0.69 1.09 1.11 1.09 1.15 1.62 0.75
+Step 11801/20000   Activation magnitudes (3): 11.83 5.17 10.91 8.62 12.95 9.32 25.27 10.11
+Step 12001/20000   lossVa 5.1994   accVa 24.2
+Step 12001/20000   lossTr 5.2076   accTr 23.9   7158s = 1.09s/step
+Step 12001/20000   Activation magnitudes (2): 2.04 0.69 1.09 1.08 1.10 1.14 1.64 0.76
+Step 12001/20000   Activation magnitudes (3): 12.17 5.43 10.94 8.62 12.89 9.54 25.81 10.50
+Step 12201/20000   lossTr 5.2142   accTr 23.9   7402s = 1.22s/step
+Step 12201/20000   Activation magnitudes (2): 2.07 0.70 1.11 1.16 1.10 1.13 1.65 0.75
+Step 12201/20000   Activation magnitudes (3): 12.42 5.41 11.85 8.55 13.57 9.23 26.38 10.52
+Step 12401/20000   lossTr 5.1769   accTr 24.1   7628s = 1.13s/step
+Step 12401/20000   Activation magnitudes (2): 2.12 0.72 1.12 1.24 1.10 1.20 1.64 0.78
+Step 12401/20000   Activation magnitudes (3): 12.83 5.23 10.31 8.40 12.48 10.18 26.67 10.11
+Step 12501/20000   lossVa 5.1954   accVa 24.2
+Step 12601/20000   lossTr 5.1879   accTr 24.2   7858s = 1.15s/step
+Step 12601/20000   Activation magnitudes (2): 2.12 0.71 1.13 1.17 1.10 1.16 1.69 0.78
+Step 12601/20000   Activation magnitudes (3): 13.00 5.64 11.30 8.77 13.34 9.54 26.18 10.94
+Step 12801/20000   lossTr 5.1594   accTr 24.2   8110s = 1.26s/step
+Step 12801/20000   Activation magnitudes (2): 2.15 0.72 1.13 1.15 1.10 1.17 1.69 0.81
+Step 12801/20000   Activation magnitudes (3): 12.80 5.35 11.25 9.82 13.13 9.37 26.50 11.31
+Step 13001/20000   lossVa 5.1747   accVa 24.3
+Step 13001/20000   lossTr 5.2035   accTr 24.0   8354s = 1.22s/step
+Step 13001/20000   Activation magnitudes (2): 2.14 0.71 1.13 1.13 1.10 1.16 1.72 0.81
+Step 13001/20000   Activation magnitudes (3): 12.70 5.76 10.66 8.73 13.62 10.11 26.48 10.74
+Step 13201/20000   lossTr 5.1458   accTr 24.6   8605s = 1.25s/step
+Step 13201/20000   Activation magnitudes (2): 2.18 0.72 1.15 1.19 1.10 1.19 1.75 0.79
+Step 13201/20000   Activation magnitudes (3): 13.73 5.36 11.89 8.80 13.77 9.38 26.48 10.93
+Step 13401/20000   lossTr 5.1714   accTr 24.1   8860s = 1.27s/step
+Step 13401/20000   Activation magnitudes (2): 2.21 0.72 1.16 1.23 1.10 1.20 1.74 0.82
+Step 13401/20000   Activation magnitudes (3): 13.04 5.42 11.85 8.62 14.20 10.51 25.88 11.85
+Step 13501/20000   lossVa 5.1564   accVa 24.5
+Step 13601/20000   lossTr 5.1782   accTr 24.3   9095s = 1.18s/step
+Step 13601/20000   Activation magnitudes (2): 2.23 0.74 1.15 1.23 1.11 1.20 1.75 0.83
+Step 13601/20000   Activation magnitudes (3): 13.84 5.42 11.63 8.91 14.48 10.54 27.06 11.01
+Step 13801/20000   lossTr 5.1736   accTr 24.3   9344s = 1.24s/step
+Step 13801/20000   Activation magnitudes (2): 2.25 0.74 1.16 1.19 1.10 1.20 1.77 0.84
+Step 13801/20000   Activation magnitudes (3): 14.00 5.64 11.38 9.07 14.70 10.76 27.02 11.35
+Step 14001/20000   lossVa 5.1405   accVa 24.6
+Step 14001/20000   lossTr 5.1823   accTr 24.3   9591s = 1.24s/step
+Step 14001/20000   Activation magnitudes (2): 2.26 0.73 1.16 1.17 1.11 1.20 1.81 0.85
+Step 14001/20000   Activation magnitudes (3): 14.48 5.50 11.68 9.58 14.68 10.41 26.76 11.34
+Step 14201/20000   lossTr 5.1550   accTr 24.4   9847s = 1.28s/step
+Step 14201/20000   Activation magnitudes (2): 2.29 0.74 1.17 1.22 1.11 1.23 1.81 0.85
+Step 14201/20000   Activation magnitudes (3): 12.94 5.46 12.00 9.19 14.54 9.98 26.05 10.73
+Step 14401/20000   lossTr 5.1675   accTr 24.3   10099s = 1.26s/step
+Step 14401/20000   Activation magnitudes (2): 2.32 0.74 1.18 1.26 1.11 1.21 1.83 0.85
+Step 14401/20000   Activation magnitudes (3): 13.31 5.72 11.81 9.24 14.84 10.47 26.34 11.15
+Step 14501/20000   lossVa 5.1316   accVa 24.7
+Step 14601/20000   lossTr 5.1061   accTr 24.7   10374s = 1.38s/step
+Step 14601/20000   Activation magnitudes (2): 2.33 0.74 1.19 1.28 1.11 1.26 1.84 0.85
+Step 14601/20000   Activation magnitudes (3): 14.58 5.83 11.80 9.03 14.78 9.99 26.55 11.21
+Step 14801/20000   lossTr 5.1198   accTr 24.5   10639s = 1.32s/step
+Step 14801/20000   Activation magnitudes (2): 2.36 0.75 1.19 1.21 1.11 1.24 1.87 0.88
+Step 14801/20000   Activation magnitudes (3): 13.89 5.90 11.69 9.35 14.42 10.36 26.29 12.03
+Step 15001/20000   lossVa 5.1166   accVa 25.0
+Step 15001/20000   lossTr 5.1365   accTr 24.7   10912s = 1.37s/step
+Step 15001/20000   Activation magnitudes (2): 2.37 0.74 1.19 1.19 1.12 1.22 1.89 0.89
+Step 15001/20000   Activation magnitudes (3): 14.76 5.62 11.68 9.42 14.54 10.48 25.95 11.62
+Step 15201/20000   lossTr 5.1098   accTr 24.8   11203s = 1.45s/step
+Step 15201/20000   Activation magnitudes (2): 2.40 0.75 1.20 1.21 1.11 1.23 1.88 0.86
+Step 15201/20000   Activation magnitudes (3): 13.84 6.00 11.79 9.14 14.42 10.76 26.82 11.39
+Step 15401/20000   lossTr 5.1425   accTr 24.8   11493s = 1.45s/step
+Step 15401/20000   Activation magnitudes (2): 2.40 0.75 1.22 1.31 1.12 1.24 1.91 0.86
+Step 15401/20000   Activation magnitudes (3): 14.93 5.61 11.64 9.17 13.95 10.65 26.30 11.13
+Step 15501/20000   lossVa 5.0867   accVa 25.0
+Step 15601/20000   lossTr 5.0920   accTr 25.1   11770s = 1.39s/step
+Step 15601/20000   Activation magnitudes (2): 2.43 0.75 1.21 1.27 1.12 1.25 1.93 0.90
+Step 15601/20000   Activation magnitudes (3): 15.57 5.56 11.41 9.40 13.89 11.07 25.59 12.07
+Step 15801/20000   lossTr 5.1185   accTr 25.0   12069s = 1.49s/step
+Step 15801/20000   Activation magnitudes (2): 2.49 0.76 1.21 1.24 1.12 1.29 1.96 0.92
+Step 15801/20000   Activation magnitudes (3): 14.25 5.63 11.16 9.56 13.76 11.73 25.58 12.10
+Step 16001/20000   lossVa 5.0778   accVa 25.1
+Step 16001/20000   lossTr 5.1140   accTr 24.8   12351s = 1.41s/step
+Step 16001/20000   Activation magnitudes (2): 2.48 0.75 1.21 1.23 1.13 1.25 1.98 0.93
+Step 16001/20000   Activation magnitudes (3): 14.81 5.73 11.04 9.37 13.46 10.77 24.82 11.69
+Step 16201/20000   lossTr 5.0940   accTr 24.8   12671s = 1.60s/step
+Step 16201/20000   Activation magnitudes (2): 2.51 0.76 1.22 1.26 1.12 1.29 1.99 0.94
+Step 16201/20000   Activation magnitudes (3): 14.57 5.96 11.39 9.45 13.62 10.15 25.23 11.74
+Step 16401/20000   lossTr 5.0713   accTr 25.0   12981s = 1.55s/step
+Step 16401/20000   Activation magnitudes (2): 2.54 0.76 1.23 1.27 1.12 1.30 1.99 0.95
+Step 16401/20000   Activation magnitudes (3): 14.60 5.86 10.90 9.39 13.34 11.00 26.25 12.44
+Step 16501/20000   lossVa 5.0628   accVa 25.2
+Step 16601/20000   lossTr 5.0950   accTr 24.9   13286s = 1.53s/step
+Step 16601/20000   Activation magnitudes (2): 2.57 0.76 1.23 1.26 1.12 1.31 2.01 0.95
+Step 16601/20000   Activation magnitudes (3): 14.85 5.71 10.86 9.39 12.92 11.04 25.62 11.99
+Step 16801/20000   lossTr 5.0667   accTr 25.3   13600s = 1.57s/step
+Step 16801/20000   Activation magnitudes (2): 2.57 0.76 1.23 1.23 1.14 1.24 2.04 0.96
+Step 16801/20000   Activation magnitudes (3): 14.68 5.95 10.77 9.17 12.02 11.04 25.98 11.52
+Step 17001/20000   lossVa 5.0579   accVa 25.3
+Step 17001/20000   lossTr 5.0621   accTr 24.9   13928s = 1.64s/step
+Step 17001/20000   Activation magnitudes (2): 2.58 0.75 1.23 1.25 1.14 1.28 2.06 0.97
+Step 17001/20000   Activation magnitudes (3): 15.02 5.66 10.13 9.53 12.50 11.03 24.98 11.95
+Step 17201/20000   lossTr 5.0326   accTr 25.4   14264s = 1.68s/step
+Step 17201/20000   Activation magnitudes (2): 2.60 0.75 1.24 1.26 1.13 1.30 2.07 0.96
+Step 17201/20000   Activation magnitudes (3): 15.28 5.77 10.69 9.65 12.31 10.80 25.77 11.54
+Step 17401/20000   lossTr 5.0874   accTr 25.2   14596s = 1.66s/step
+Step 17401/20000   Activation magnitudes (2): 2.63 0.76 1.25 1.28 1.14 1.32 2.08 0.98
+Step 17401/20000   Activation magnitudes (3): 15.63 5.71 10.51 9.36 12.05 11.48 25.85 12.23
+Step 17501/20000   lossVa 5.0409   accVa 25.4
+Step 17601/20000   lossTr 5.0378   accTr 25.3   14923s = 1.64s/step
+Step 17601/20000   Activation magnitudes (2): 2.61 0.74 1.25 1.26 1.14 1.26 2.13 0.96
+Step 17601/20000   Activation magnitudes (3): 15.99 5.72 10.47 9.42 11.86 11.66 26.57 10.81
+Step 17801/20000   lossTr 5.0247   accTr 25.6   15240s = 1.58s/step
+Step 17801/20000   Activation magnitudes (2): 2.67 0.76 1.25 1.27 1.14 1.33 2.12 1.01
+Step 17801/20000   Activation magnitudes (3): 15.95 5.76 10.23 9.50 11.51 11.00 27.24 12.08
+Step 18001/20000   lossVa 5.0216   accVa 25.6
+Step 18001/20000   lossTr 5.0238   accTr 25.5   15566s = 1.63s/step
+Step 18001/20000   Activation magnitudes (2): 2.66 0.75 1.24 1.28 1.14 1.30 2.13 1.01
+Step 18001/20000   Activation magnitudes (3): 15.96 5.73 10.11 9.40 11.43 11.01 27.20 11.92
+Step 18201/20000   lossTr 5.0047   accTr 25.5   15920s = 1.77s/step
+Step 18201/20000   Activation magnitudes (2): 2.67 0.76 1.24 1.25 1.14 1.24 2.12 0.98
+Step 18201/20000   Activation magnitudes (3): 16.02 5.84 10.35 9.62 10.59 11.47 26.67 10.91
+Step 18401/20000   lossTr 5.0376   accTr 25.4   16240s = 1.60s/step
+Step 18401/20000   Activation magnitudes (2): 2.70 0.76 1.25 1.29 1.14 1.33 2.13 1.02
+Step 18401/20000   Activation magnitudes (3): 15.99 5.81 10.37 9.51 11.06 11.28 27.69 11.20
+Step 18501/20000   lossVa 5.0083   accVa 25.7
+Step 18601/20000   lossTr 5.0315   accTr 25.5   16592s = 1.76s/step
+Step 18601/20000   Activation magnitudes (2): 2.71 0.76 1.25 1.26 1.14 1.33 2.15 1.03
+Step 18601/20000   Activation magnitudes (3): 16.65 5.95 10.19 9.52 11.24 10.97 28.44 11.95
+Step 18801/20000   lossTr 4.9939   accTr 25.8   16925s = 1.67s/step
+Step 18801/20000   Activation magnitudes (2): 2.70 0.75 1.25 1.27 1.14 1.33 2.16 1.05
+Step 18801/20000   Activation magnitudes (3): 16.64 5.70 10.26 9.45 11.06 11.53 28.36 11.60
+Step 19001/20000   lossVa 4.9928   accVa 25.8
+Step 19001/20000   lossTr 5.0042   accTr 25.5   17268s = 1.71s/step
+Step 19001/20000   Activation magnitudes (2): 2.71 0.75 1.25 1.28 1.15 1.32 2.18 1.07
+Step 19001/20000   Activation magnitudes (3): 16.64 5.75 9.75 9.22 11.12 11.13 28.65 11.96
+Step 19201/20000   lossTr 4.9638   accTr 26.0   17660s = 1.96s/step
+Step 19201/20000   Activation magnitudes (2): 2.74 0.76 1.25 1.28 1.15 1.33 2.17 1.07
+Step 19201/20000   Activation magnitudes (3): 16.33 5.78 10.03 9.21 10.78 11.32 27.88 11.54
+Step 19401/20000   lossTr 5.0238   accTr 25.7   18015s = 1.78s/step
+Step 19401/20000   Activation magnitudes (2): 2.74 0.76 1.25 1.27 1.15 1.33 2.18 1.07
+Step 19401/20000   Activation magnitudes (3): 16.39 5.74 10.16 9.34 11.07 11.40 28.44 11.12
+Step 19501/20000   lossVa 4.9824   accVa 26.0
+Step 19601/20000   lossTr 4.9807   accTr 25.9   18393s = 1.89s/step
+Step 19601/20000   Activation magnitudes (2): 2.73 0.75 1.25 1.27 1.15 1.32 2.19 1.07
+Step 19601/20000   Activation magnitudes (3): 17.00 5.75 10.40 9.21 10.80 10.90 28.40 11.85
+Step 19801/20000   lossTr 5.0062   accTr 25.9   18773s = 1.90s/step
+Step 19801/20000   Activation magnitudes (2): 2.74 0.75 1.26 1.25 1.15 1.32 2.21 1.08
+Step 19801/20000   Activation magnitudes (3): 16.40 5.75 10.17 9.05 11.11 10.83 28.48 10.86
+Step 20000/20000   lossVa 4.9712   accVa 26.0
+Step 20000/20000   Peak CUDA memory usage: 6.198 GB
+Step 20000/20000   lossTr 4.9959   accTr 25.7   19115s = 1.72s/step
+Step 20000/20000   Activation magnitudes (2): 2.73 0.75 1.26 1.29 1.16 1.33 2.20 1.10
+Step 20000/20000   Activation magnitudes (3): 16.93 5.76 9.75 9.32 11.18 10.89 28.88 11.78
+Saving AF:       ./results-fineweb10B\ptAf-optimizedMlp-layerSpecific-phase1-step20000.pt
+Saving AF (CSV): ./results-fineweb10B\ptAf-optimizedMlp-layerSpecific-phase1-step20000.csv
+Saving plot (loss/acc): ./results-fineweb10B\tr-optimizedMlp-layerSpecific-phase1-step020000-00051835-00055449.png
+Saving plot (AF): ./results-fineweb10B\af-optimizedMlp-layerSpecific-phase1-step020000.png
+Saving plot (act): ./results-fineweb10B\act-optimizedMlp-layerSpecific-phase1-step020000.png
