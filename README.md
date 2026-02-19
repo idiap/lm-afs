@@ -126,12 +126,10 @@ The training curves below show the token accuracy and loss on the training (blac
 With the approprite flag (```--plottingLevel 3```), we also plot the magnitude of internal activations (max in red, mean in blue; one line per layer, ticker line for the first layer).
 This is useful to set the range of the learned activation functions (```afRange```).
 
-[📈tr-baseline-gelu-step020000-00001616-00004616.png](results-fineweb10B/tr-baseline-gelu-step020000-00001616-00004616.png)<br>
-[📊act-baseline-gelu-step020000.png](results-fineweb10B/act-baseline-gelu-step020000.png)
-[📄log-baseline-gelu.txt](results-fineweb10B/log-baseline-gelu.txt)<br>
-
 <img src="results-fineweb10B/tr-baseline-gelu-step020000-00001616-00004616.png" width="700"><br>
 <img src="results-fineweb10B/act-baseline-gelu-step020000.png" width="700"><br>
+
+[📄log-baseline-gelu.txt](results-fineweb10B/log-baseline-gelu.txt)<br>
 ```
 (...)
 Step 20000/20000   lossVa 4.9334   accVa 26.3
@@ -145,21 +143,16 @@ Step 20000/20000   Activation magnitudes (3): 14.04 10.85 5.49 9.98 17.13 16.83 
 Training curves below for phase I (parallel models with staggered starts),
 and the learned activation functions for the 4 MLPs and 4 attention layers).
 
-[📈tr-optimizedMlpAtt-layerSpecific-phase1-step020000-00031632-00033550.png](tr-optimizedMlpAtt-layerSpecific-phase1-step020000-00031632-00033550.png)<br>
-[📈af-optimizedMlpAtt-layerSpecific-phase1-step020000.png](af-optimizedMlpAtt-layerSpecific-phase1-step020000.png)
-
 <img src="results-fineweb10B/tr-optimizedMlpAtt-layerSpecific-phase1-step020000-00031632-00033550.png" width="700"><br>
 <img src="results-fineweb10B/af-optimizedMlpAtt-layerSpecific-phase1-step020000.png" width="700">
 
 And those learned when shared across layers (MLP on the left, attention on the right).<br>
-[📈af-optimizedMlpAtt-layerShared-phase1-step020000.png](af-optimizedMlpAtt-layerShared-phase1-step020000.png)<br>
 <img src="results-fineweb10B/af-optimizedMlpAtt-layerShared-phase1-step020000.png" width="175">
 
 And the training curves for phase II (fresh new model with frozen activation functions).<br>
-[📈tr-optimizedMlpAtt-layerShared-phase2-step020000-00001745-00005106.png](tr-optimizedMlpAtt-layerShared-phase2-step020000-00001745-00005106.png)<br>
-[📄log-optimizedMlpAtt-layerShared-phase2.txt](results-fineweb10B/log-optimizedMlpAtt-layerShared-phase2.txt)
-
 <img src="results-fineweb10B/tr-optimizedMlpAtt-layerSpecific-phase2-step020000-00001257-00003603.png" width="700"><br>
+
+[📄log-optimizedMlpAtt-layerShared-phase2.txt](results-fineweb10B/log-optimizedMlpAtt-layerShared-phase2.txt)
 ```
 (...)
 Step 20000/20000   lossVa 4.9006   accVa 26.6
