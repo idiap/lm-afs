@@ -2,7 +2,7 @@ LM-AFs: Language models with learned activation functions
 =========================================================
 
 This repository is the official implementation of language models with learnable activation functions used in the following papers:
-- [1] *[Can transformers Really Do It All? On the Compatibility of Inductive Biases Across Tasks](https://arxiv.org/search/cs?searchtype=author&query=Teney,+D)*, ICLR, 2026.
+- [1] *[Can transformers Really Do It All? On the Compatibility of Inductive Biases Across Tasks](https://openreview.net/forum?id=B08MW8oDqN)*, ICLR, 2026.
 - [2] *Better Language Models Require Better Domain-Specific Inductive Biases*, Under review, 2026.
 
 The code implements a transformer similar to the 
